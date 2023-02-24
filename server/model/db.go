@@ -8,9 +8,11 @@ import (
 	"time"
 )
 
+var db *gorm.DB
+
 // InitDb 数据库入口文件
 func InitDb() {
-
+	var err error
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		utils.DbUser,
 		utils.DbPassWord,
@@ -18,7 +20,7 @@ func InitDb() {
 		utils.DbPort,
 		utils.DbName,
 	)
-	db, err := gorm.Open(mysql.New(mysql.Config{
+	db, err = gorm.Open(mysql.New(mysql.Config{
 		DSN:                       dsn,   // DSN data source name
 		DefaultStringSize:         256,   // string 类型字段的默认长度
 		DisableDatetimePrecision:  true,  // 禁用 datetime 精度，MySQL 5.6 之前的数据库不支持
@@ -40,7 +42,7 @@ func InitDb() {
 
 	//连接池
 	// 获取通用数据库对象 sql.DB ，然后使用其提供的功能
-	sqlDB, err := db.DB()
+	sqlDB, _ := db.DB()
 
 	// SetMaxIdleConns 用于设置连接池中空闲连接的最大数量。
 	sqlDB.SetMaxIdleConns(10)

@@ -3,7 +3,7 @@ package routes
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"net/http"
+	v1 "starblog/api/v1"
 	"starblog/utils"
 )
 
@@ -12,13 +12,19 @@ func InitRouter() {
 	gin.SetMode(utils.AppMode)
 	r := gin.Default() //此处可以用Default或者New，区别是Default默认加了两个中间件-日志文件和错误恢复
 	//初始路由，由于采用前后端分离以及版本控制，所以使用路由组
-	router := r.Group("api/v1")
+	routerV1 := r.Group("api/v1")
 	{
-		router.GET("hello", func(c *gin.Context) {
-			c.JSON(http.StatusOK, gin.H{
-				"msg": "ok",
-			})
-		})
+		//User模块的路由接口
+		//添加用户
+		routerV1.POST("user/add", v1.AddUser)
+		//查看全部用户
+		routerV1.GET("users", v1.ShowUsers)
+		//编辑用户
+		routerV1.PUT("user/:id", v1.EditUser)
+		//删除用户
+		routerV1.DELETE("user/:id", v1.DelUser)
+		//Article模块的路由接口
+		//Category模块的路由接口
 	}
 	err := r.Run(utils.HttpPort)
 	if err != nil {
