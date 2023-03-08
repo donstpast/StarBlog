@@ -4,7 +4,6 @@ import "gorm.io/gorm"
 
 // Article 文章模型
 type Article struct {
-	Universal
 	gorm.Model
 	Title   string `gorm:"type:varchar(100);not null;comment:文章标题" json:"title"`
 	Cid     int    `gorm:"type:int;not null;foreignKey:Cid;comment:分类 ID" json:"cid"`
