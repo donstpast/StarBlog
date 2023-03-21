@@ -46,7 +46,6 @@ func ShowUsers(pageSize int, pageNum int) []User {
 	result := DB.Limit(pageSize).Find(&users).Offset((pageNum - 1) * pageSize) //分页通用做法
 	//如果err不为空，并且gorm的ErrRecordNotFound不为空，则异常，返回nil
 	//&& result.Error != gorm.ErrRecordNotFound会报错，暂时不加，之后解决
-	//todo 解决result.Error != gorm.ErrRecordNotFound问题
 	if result.Error != nil {
 		return nil
 	}
