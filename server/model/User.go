@@ -18,7 +18,13 @@ type User struct {
 // CheckUser 查询用户是否存在
 func CheckUser(name string) (code int) {
 	var users User
-	DB.Select("id").Where("username = ?", name).First(&users)
+	if users.Username == "" || users.Password == "" {
+		return errmsg.ERROR_USERNAME_OR_PASSWORD_IS_EMPTY
+	}
+	err := DB.Select("id").Where("username = ?", name).First(&users).Error
+	if err != nil {
+		return errmsg.ERROR
+	}
 	if users.ID > 0 {
 		return errmsg.ERROR_USERNAME_USED //1002 用户名已被使用
 	}
@@ -34,12 +40,14 @@ func CreateUser(data *User) int {
 	return errmsg.SUCCESS //200
 }
 
-// GetUsers 查询用户列表
-func GetUsers(pageSize int, pageNum int) []User {
-	var err error
+// ShowUsers 查询用户列表
+func ShowUsers(pageSize int, pageNum int) []User {
 	var users []User
-	err = DB.Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&users)
-	if err != nil && err != gorm.ErrRecordNotFound {
+	result := DB.Limit(pageSize).Find(&users).Offset((pageNum - 1) * pageSize) //分页通用做法
+	//如果err不为空，并且gorm的ErrRecordNotFound不为空，则异常，返回nil
+	//&& result.Error != gorm.ErrRecordNotFound会报错，暂时不加，之后解决
+	//todo 解决result.Error != gorm.ErrRecordNotFound问题
+	if result.Error != nil {
 		return nil
 	}
 	return users

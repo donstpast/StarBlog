@@ -6,16 +6,14 @@ import (
 	"net/http"
 	"starblog/model"
 	"starblog/utils/errmsg"
+	"strconv"
 )
 
 var code int
 
-// UserExist 查询用户是否存在
-func UserExist(c *gin.Context) {
-
-}
-
 // AddUser 添加用户,引进结构体
+// 增加后端判断用户名和密码是否为空，若为空则不允许创建
+
 func AddUser(c *gin.Context) {
 	var data model.User
 	_ = c.ShouldBindJSON(&data)
@@ -24,6 +22,8 @@ func AddUser(c *gin.Context) {
 		model.CreateUser(&data)
 	} else if code == errmsg.ERROR_USERNAME_USED {
 		code = errmsg.ERROR_USERNAME_USED
+	} else if code == errmsg.ERROR_USERNAME_OR_PASSWORD_IS_EMPTY {
+		code = errmsg.ERROR_USERNAME_OR_PASSWORD_IS_EMPTY
 	} else {
 		code = errmsg.ERROR
 	}
@@ -38,8 +38,24 @@ func AddUser(c *gin.Context) {
 
 // ShowUsers 显示用户列表
 func ShowUsers(c *gin.Context) {
-	//pageSize, _ := strconv.Atoi(c.Query("pagesize"))
-	//pageNum, _ := strconv.Atoi(c.Query("pagenum"))
+	pageSize, _ := strconv.Atoi(c.Query("pagesize"))
+	pageNum, _ := strconv.Atoi(c.Query("pagenum"))
+	//如果pageSize或者pageNum为0，则进行gorm中的 Cancel limit condition with -1
+	//例子：db.Limit(10).Find(&users1).Limit(-1).Find(&users2)
+	if pageSize == 0 {
+		pageSize = -1
+	}
+	if pageNum == 0 {
+		pageNum = -1
+	}
+	//传给model中的ShowUser函数，返回一个user切片
+	data := model.ShowUsers(pageSize, pageNum)
+	//将数据传递给前端展示
+	c.JSON(http.StatusOK, gin.H{
+		"status":  errmsg.SUCCESS,
+		"data":    data,
+		"message": errmsg.GetErrMsg(errmsg.SUCCESS),
+	})
 
 }
 
