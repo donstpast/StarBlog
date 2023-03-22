@@ -2,6 +2,7 @@ package model
 
 import (
 	"gorm.io/gorm"
+	"starblog/utils/crypt"
 	"starblog/utils/errmsg"
 )
 
@@ -18,13 +19,7 @@ type User struct {
 // CheckUser 查询用户是否存在
 func CheckUser(name string) (code int) {
 	var users User
-	if users.Username == "" || users.Password == "" {
-		return errmsg.ERROR_USERNAME_OR_PASSWORD_IS_EMPTY
-	}
-	err := DB.Select("id").Where("username = ?", name).First(&users).Error
-	if err != nil {
-		return errmsg.ERROR
-	}
+	DB.Select("id").Where("username = ?", name).First(&users)
 	if users.ID > 0 {
 		return errmsg.ERROR_USERNAME_USED //1002 用户名已被使用
 	}
@@ -33,6 +28,7 @@ func CheckUser(name string) (code int) {
 
 // CreateUser  新增用户
 func CreateUser(data *User) int {
+	data.Password = crypt.PwScrypt(data.Password)
 	err := DB.Create(data).Error
 	if err != nil {
 		return errmsg.ERROR //500

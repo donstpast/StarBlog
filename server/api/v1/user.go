@@ -17,22 +17,29 @@ var code int
 func AddUser(c *gin.Context) {
 	var data model.User
 	_ = c.ShouldBindJSON(&data)
-	code = model.CheckUser(data.Username)
-	if code == errmsg.SUCCESS {
-		model.CreateUser(&data)
-	} else if code == errmsg.ERROR_USERNAME_USED {
-		code = errmsg.ERROR_USERNAME_USED
-	} else if code == errmsg.ERROR_USERNAME_OR_PASSWORD_IS_EMPTY {
-		code = errmsg.ERROR_USERNAME_OR_PASSWORD_IS_EMPTY
-	} else {
-		code = errmsg.ERROR
-	}
+	if data.Username != "" && data.Password != "" {
+		code = model.CheckUser(data.Username)
+		if code == errmsg.SUCCESS {
+			model.CreateUser(&data)
+		} else if code == errmsg.ERROR_USERNAME_USED {
+			code = errmsg.ERROR_USERNAME_USED
+		} else {
+			code = errmsg.ERROR
+		}
 
-	c.JSON(http.StatusOK, gin.H{
-		"status":  code,
-		"data":    data,
-		"message": errmsg.GetErrMsg(code),
-	})
+		c.JSON(http.StatusOK, gin.H{
+			"status":  code,
+			"data":    data,
+			"message": errmsg.GetErrMsg(code),
+		})
+	} else {
+		code = errmsg.ERROR_USERNAME_OR_PASSWORD_IS_EMPTY
+		c.JSON(http.StatusBadRequest, gin.H{
+			"status":  code,
+			"data":    data,
+			"message": errmsg.GetErrMsg(code),
+		})
+	}
 
 }
 

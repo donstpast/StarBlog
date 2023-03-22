@@ -29,6 +29,14 @@
   - [x] 实现新增用户接口
   - [x] 实现后端验证注册用户时账号密码是否为空
   - [x] 实现采用分页的方式查看用户列表
+  - [x] 实现了用户密码加盐存入数据库
+  - [x] 修改后端验证注册用户时判断账号密码是否为空的逻辑
 
 # Todo
-	//todo 解决result.Error != gorm.ErrRecordNotFound问题
+- [ ] 解决result.Error != gorm.ErrRecordNotFound问题
+- [ ] 采用第三方库validator来进行数据校验
+- [ ] 更换为使用钩子函数来完成密码加盐的操作
+
+ 
+
+
