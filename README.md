@@ -32,6 +32,7 @@
   - [x] 实现了用户密码加盐存入数据库
   - [x] 修改后端验证注册用户时判断账号密码是否为空的逻辑
   - [x] 实现删除用户接口
+  - [x] 将业务逻辑抽离到Service层，model层现在只负责与数据库的交互，存放实体类
 
 # Todo
 - [ ] 解决result.Error != gorm.ErrRecordNotFound问题

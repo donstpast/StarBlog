@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"starblog/model"
+	"starblog/service"
 	"starblog/utils/errmsg"
 	"strconv"
 )
@@ -18,9 +19,9 @@ func AddUser(c *gin.Context) {
 	var data model.User
 	_ = c.ShouldBindJSON(&data)
 	if data.Username != "" && data.Password != "" {
-		code = model.CheckUser(data.Username)
+		code = service.CheckUser(data.Username)
 		if code == errmsg.SUCCESS {
-			model.CreateUser(&data)
+			service.CreateUser(&data)
 		} else if code == errmsg.ERROR_USERNAME_USED {
 			code = errmsg.ERROR_USERNAME_USED
 		} else {
@@ -56,7 +57,7 @@ func ShowUsers(c *gin.Context) {
 		pageNum = -1
 	}
 	//传给model中的ShowUser函数，返回一个user切片
-	data := model.ShowUsers(pageSize, pageNum)
+	data := service.ShowUsers(pageSize, pageNum)
 	//将数据传递给前端展示
 	c.JSON(http.StatusOK, gin.H{
 		"status":  errmsg.SUCCESS,
@@ -76,7 +77,7 @@ func EditUser(c *gin.Context) {
 // DelUser 删除用户
 func DelUser(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
-	code = model.DelUser(id)
+	code = service.DelUser(id)
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
 		"message": errmsg.GetErrMsg(code),
