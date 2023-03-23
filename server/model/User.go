@@ -47,3 +47,18 @@ func ShowUsers(pageSize int, pageNum int) []User {
 	}
 	return users
 }
+
+// DelUser 删除用户
+func DelUser(id int) int {
+	var user User
+	//先判断用户是否存在
+	err := DB.Select("deleted_at").Where("id = ?", id).First(&user).Error
+	if err != nil {
+		return errmsg.ERROR_USER_NOT_EXIST
+	}
+	err = DB.Where("id = ?", id).Delete(&user).Error
+	if err != nil {
+		return errmsg.ERROR
+	}
+	return errmsg.SUCCESS
+}
