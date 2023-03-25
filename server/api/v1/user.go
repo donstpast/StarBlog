@@ -71,6 +71,18 @@ func ShowUsers(c *gin.Context) {
 
 // EditUser 编辑用户
 func EditUser(c *gin.Context) {
+	var data model.User
+	id, _ := strconv.Atoi(c.Param("id"))
+	_ = c.ShouldBindJSON(&data)
+	code = service.CheckUser(data.Username)
+	if code == errmsg.SUCCESS {
+		code = service.EditUser(id, &data)
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
+		"data":    data,
+		"message": errmsg.GetErrMsg(code),
+	})
 
 }
 
