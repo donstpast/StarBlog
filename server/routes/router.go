@@ -25,6 +25,16 @@ func InitRouter() {
 		routerV1.DELETE("user/:id", v1.DelUser)
 		//Article模块的路由接口
 		//Category模块的路由接口
+		//添加分类
+		routerV1.POST("category/add", v1.AddCategory)
+		//查看全部分类
+		routerV1.GET("categories", v1.ShowCategories)
+		//todo 查看单个分类下文章
+		//编辑分类
+		routerV1.PUT("category/:id", v1.EditCategory)
+		//删除分类
+		routerV1.DELETE("category/:id", v1.DelCategory)
+
 	}
 	err := r.Run(utils.HttpPort)
 	if err != nil {

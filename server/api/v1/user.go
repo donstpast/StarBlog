@@ -10,8 +10,6 @@ import (
 	"strconv"
 )
 
-var code int
-
 // AddUser 添加用户,引进结构体
 // 增加后端判断用户名和密码是否为空，若为空则不允许创建
 
@@ -19,7 +17,7 @@ func AddUser(c *gin.Context) {
 	var data model.User
 	_ = c.ShouldBindJSON(&data)
 	if data.Username != "" && data.Password != "" {
-		code = service.CheckUser(data.Username)
+		code := service.CheckUser(data.Username)
 		if code == errmsg.SUCCESS {
 			service.CreateUser(&data)
 		} else if code == errmsg.ERROR_USERNAME_USED {
@@ -34,7 +32,7 @@ func AddUser(c *gin.Context) {
 			"message": errmsg.GetErrMsg(code),
 		})
 	} else {
-		code = errmsg.ERROR_USERNAME_OR_PASSWORD_IS_EMPTY
+		code := errmsg.ERROR_USERNAME_OR_PASSWORD_IS_EMPTY
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status":  code,
 			"data":    data,
@@ -54,7 +52,7 @@ func ShowUsers(c *gin.Context) {
 		pageSize = -1
 	}
 	if pageNum == 0 {
-		pageNum = -1
+		pageNum = 1
 	}
 	//传给model中的ShowUser函数，返回一个user切片
 	data := service.ShowUsers(pageSize, pageNum)
@@ -74,7 +72,7 @@ func EditUser(c *gin.Context) {
 	var data model.User
 	id, _ := strconv.Atoi(c.Param("id"))
 	_ = c.ShouldBindJSON(&data)
-	code = service.CheckUser(data.Username)
+	code := service.CheckUser(data.Username)
 	if code == errmsg.SUCCESS {
 		code = service.EditUser(id, &data)
 	}
@@ -89,7 +87,7 @@ func EditUser(c *gin.Context) {
 // DelUser 删除用户
 func DelUser(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
-	code = service.DelUser(id)
+	code := service.DelUser(id)
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
 		"message": errmsg.GetErrMsg(code),

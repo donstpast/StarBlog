@@ -19,14 +19,20 @@ const (
 	ERROR_TOKEN_WRONG                   = 1007 //token错误
 	ERROR_TOKEN_FORMAT_WRONG            = 1008 //token格式错误
 	//code在(2000,3000)为文章模块错误
+
 	//code在(3000,4000)为分类模块错误
+	ERROR_CATEGORY_NOT_EXIST = 3001 //分类不存在
+	ERROR_CATEGORY_USED      = 3002 //分类已存在
+	ERROR_CATEGORY_IS_EMPTY  = 3003
 )
 
 // 定义一个map
 // int处为上方状态码常量，string处为需要抛出的错误信息
 var codeMsg = map[int]string{
-	SUCCESS:                             "OK",
-	ERROR:                               "FAIL",
+	//通用状态码
+	SUCCESS: "OK",
+	ERROR:   "FAIL",
+	//用户模块错误码
 	ERROR_USER_NOT_EXIST:                "用户不存在",
 	ERROR_USERNAME_USED:                 "用户名已存在",
 	ERROR_PASSWORD_WRONG:                "密码错误",
@@ -35,6 +41,12 @@ var codeMsg = map[int]string{
 	ERROR_TOKEN_OVERTIME:                "TOKEN已过期",
 	ERROR_TOKEN_WRONG:                   "TOKEN错误",
 	ERROR_TOKEN_FORMAT_WRONG:            "TOKEN格式错误",
+	//文章模块错误码
+
+	//分类模块错误码
+	ERROR_CATEGORY_NOT_EXIST: "分类不存在",
+	ERROR_CATEGORY_USED:      "分类已存在",
+	ERROR_CATEGORY_IS_EMPTY:  "分类名称不能为空",
 }
 
 // GetErrMsg 用来输出错误信息的函数,传入一个int型，返回一个string类型
