@@ -19,11 +19,12 @@ const (
 	ERROR_TOKEN_WRONG                   = 1007 //token错误
 	ERROR_TOKEN_FORMAT_WRONG            = 1008 //token格式错误
 	//code在(2000,3000)为文章模块错误
+	ERROR_ARTICLE_NOT_EXIST = 2001 //文章不存在
 
 	//code在(3000,4000)为分类模块错误
 	ERROR_CATEGORY_NOT_EXIST = 3001 //分类不存在
 	ERROR_CATEGORY_USED      = 3002 //分类已存在
-	ERROR_CATEGORY_IS_EMPTY  = 3003
+	ERROR_CATEGORY_IS_EMPTY  = 3003 //分类名称不能为空
 )
 
 // 定义一个map
@@ -42,7 +43,7 @@ var codeMsg = map[int]string{
 	ERROR_TOKEN_WRONG:                   "TOKEN错误",
 	ERROR_TOKEN_FORMAT_WRONG:            "TOKEN格式错误",
 	//文章模块错误码
-
+	ERROR_ARTICLE_NOT_EXIST: "文章不存在",
 	//分类模块错误码
 	ERROR_CATEGORY_NOT_EXIST: "分类不存在",
 	ERROR_CATEGORY_USED:      "分类已存在",

@@ -17,17 +17,28 @@ func InitRouter() {
 		//User模块的路由接口
 		//添加用户
 		routerV1.POST("user/add", v1.AddUser)
-		//查看全部用户
+		//查看用户列表
 		routerV1.GET("users", v1.ShowUsers)
 		//编辑用户
 		routerV1.PUT("user/:id", v1.EditUser)
 		//删除用户
 		routerV1.DELETE("user/:id", v1.DelUser)
+
 		//Article模块的路由接口
+		//添加文章
+		routerV1.POST("article/add", v1.AddArticle)
+		//查看文章列表
+		routerV1.GET("articles", v1.ShowArticles)
+		//todo 查看单个文章内容
+		//编辑文章
+		routerV1.PUT("article/:id", v1.EditArticle)
+		//删除文章
+		routerV1.DELETE("article/:id", v1.DelArticle)
+
 		//Category模块的路由接口
 		//添加分类
 		routerV1.POST("category/add", v1.AddCategory)
-		//查看全部分类
+		//查看分类列表
 		routerV1.GET("categories", v1.ShowCategories)
 		//todo 查看单个分类下文章
 		//编辑分类
