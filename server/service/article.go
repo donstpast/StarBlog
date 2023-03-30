@@ -14,21 +14,38 @@ func CreateArticle(data *model.Article) int {
 	return errmsg.SUCCESS //200
 }
 
-// ShowArticles 查询文章列表
 // todo 显示文章总数
-func ShowArticles(pageSize int, pageNum int) []model.Article {
+
+// ShowArticles 查询文章列表
+func ShowArticles(pageSize int, pageNum int) ([]model.Article, int) {
 	var arti []model.Article
-	err := model.DB.Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&arti).Error //分页通用做法
+	err := model.DB.Preload("Category").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&arti).Error //分页通用做法
 	//如果err不为空，并且gorm的ErrRecordNotFound不为空，则异常，返回nil
 	if err != nil {
-		return nil
+		return nil, errmsg.ERROR
 	}
-	return arti
+	return arti, errmsg.SUCCESS
 }
 
-//todo 显示分类下所有文章
+// ShowCategoryArticles 显示分类下所有文章
+func ShowCategoryArticles(id int, pageSize int, pageNum int) ([]model.Article, int) {
+	var cateArti []model.Article
+	err := model.DB.Preload("Category").Limit(pageSize).Offset((pageNum-1)*pageSize).Where("cid = ?", id).Find(&cateArti).Error
+	if err != nil {
+		return nil, errmsg.ERROR_CATEGORY_NOT_EXIST
+	}
+	return cateArti, errmsg.SUCCESS
+}
 
-// todo 查看单个文章内容
+// ShowSingleArticle 查看单个文章内容
+func ShowSingleArticle(id int) (model.Article, int) {
+	var arti model.Article
+	err := model.DB.Preload("Category").Where("id = ?", id).First(&arti).Error
+	if err != nil {
+		return arti, errmsg.ERROR_ARTICLE_NOT_EXIST
+	}
+	return arti, errmsg.SUCCESS
+}
 
 // EditArticle 编辑文章
 func EditArticle(id int, data *model.Article) int {
