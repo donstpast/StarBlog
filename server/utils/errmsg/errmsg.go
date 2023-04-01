@@ -1,6 +1,15 @@
 package errmsg
 
-//错误信息处理
+import "errors"
+
+// 错误信息处理
+// jwt中Token错误
+var (
+	TokenExpired     = errors.New("token已过期,请重新登录")
+	TokenNotValidYet = errors.New("token无效,请重新登录")
+	TokenMalformed   = errors.New("token不正确,请重新登录")
+	TokenInvalid     = errors.New("这不是一个token,请重新登录")
+)
 
 // 定义一些错误常量（最常见的时候状态码）
 const (
@@ -14,10 +23,11 @@ const (
 	ERROR_USERNAME_USED                 = 1002 //用户名已存在
 	ERROR_PASSWORD_WRONG                = 1003 //密码错误
 	ERROR_USERNAME_OR_PASSWORD_IS_EMPTY = 1004 //用户名或者密码为空
-	ERROR_TOKEN_NOT_EXIST               = 1005 //token不存在
-	ERROR_TOKEN_OVERTIME                = 1006 //token过期
-	ERROR_TOKEN_WRONG                   = 1007 //token错误
-	ERROR_TOKEN_FORMAT_WRONG            = 1008 //token格式错误
+	ERROR_USER_NOT_ADMIN                = 1005
+	ERROR_TOKEN_NOT_EXIST               = 1006 //token不存在
+	ERROR_TOKEN_OVERTIME                = 1007 //token过期
+	ERROR_TOKEN_WRONG                   = 1008 //token错误
+	ERROR_TOKEN_FORMAT_WRONG            = 1009 //token格式错误
 	//code在(2000,3000)为文章模块错误
 	ERROR_ARTICLE_NOT_EXIST = 2001 //文章不存在
 
@@ -38,6 +48,7 @@ var codeMsg = map[int]string{
 	ERROR_USERNAME_USED:                 "用户名已存在",
 	ERROR_PASSWORD_WRONG:                "密码错误",
 	ERROR_USERNAME_OR_PASSWORD_IS_EMPTY: "用户名或密码为空",
+	ERROR_USER_NOT_ADMIN:                "用户没有管理员权限",
 	ERROR_TOKEN_NOT_EXIST:               "TOKEN不存在",
 	ERROR_TOKEN_OVERTIME:                "TOKEN已过期",
 	ERROR_TOKEN_WRONG:                   "TOKEN错误",

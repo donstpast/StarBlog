@@ -45,7 +45,7 @@ func ShowArticles(c *gin.Context) {
 
 }
 
-// 查询单个分类下所有的文章
+// ShowCategoryArticles 查询单个分类下所有的文章
 func ShowCategoryArticles(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	pageSize, _ := strconv.Atoi(c.Query("pagesize"))

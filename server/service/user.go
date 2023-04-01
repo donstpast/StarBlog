@@ -19,7 +19,7 @@ func CheckUser(name string) (code int) {
 
 // CreateUser  新增用户
 func CreateUser(data *model.User) int {
-	data.Password = crypt.PwScrypt(data.Password)
+	data.Password, data.Salt = crypt.PwScrypt(data.Password)
 	err := model.DB.Create(data).Error
 	if err != nil {
 		return errmsg.ERROR //500
@@ -76,4 +76,22 @@ func DelUser(id int) int {
 		return errmsg.ERROR
 	}
 	return errmsg.SUCCESS
+}
+
+// CheckLogin 登录验证
+func CheckLogin(username string, password string) (model.User, int) {
+	var user model.User
+	model.DB.Where("username = ?", username).First(&user)
+	//验证密码是否正确
+	isEqual := crypt.VerifyPassword(password, user.Password, user.Salt)
+	if user.ID == 0 {
+		return user, errmsg.ERROR_USER_NOT_EXIST
+	}
+	if !isEqual {
+		return user, errmsg.ERROR_PASSWORD_WRONG
+	}
+	if user.Role != 0 {
+		return user, errmsg.ERROR_USER_NOT_ADMIN
+	}
+	return user, errmsg.SUCCESS
 }

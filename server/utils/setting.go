@@ -5,8 +5,8 @@ import (
 	"gopkg.in/ini.v1"
 )
 
-//做一些数据处理Ï,初始化配置文件参数
-//引入变量
+// 做一些数据处理Ï,初始化配置文件参数
+// 引入变量
 var (
 	AppMode    string
 	HttpPort   string
@@ -16,9 +16,10 @@ var (
 	DbUser     string
 	DbPassWord string
 	DbName     string
+	JwtKey     string
 )
 
-//包初始化函数接口
+// 包初始化函数接口
 func init() {
 	file, err := ini.Load("config/config.ini")
 	if err != nil {
@@ -34,9 +35,10 @@ func LoadServer(file *ini.File) {
 	//ini语法，加载父子分区，采用MustString方法，如果取不到值，则输出为默认值(下面两个相同)
 	AppMode = file.Section("server").Key("AppMode").MustString("debug")
 	HttpPort = file.Section("server").Key("HttpPort").MustString("8383")
+	JwtKey = file.Section("server").Key("JwtKey").MustString("ZG9uc3RwYXN0")
 }
 
-//LoadDb 采用函数方式抽离Database，初始化database分区内变量内容
+// LoadDb 采用函数方式抽离Database，初始化database分区内变量内容
 func LoadDb(file *ini.File) {
 	Db = file.Section("database").Key("Db").MustString("mysql")
 	DbHost = file.Section("database").Key("DbHost").MustString("localhost")
