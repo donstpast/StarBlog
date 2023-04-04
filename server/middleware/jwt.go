@@ -46,6 +46,7 @@ func (j *JWT) ParserToken(tokenString string) (*MyClaims, error) {
 		}
 
 	}
+
 	if token != nil {
 		if claims, ok := token.Claims.(*MyClaims); ok && token.Valid {
 			return claims, nil
