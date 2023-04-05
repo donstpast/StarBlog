@@ -13,6 +13,7 @@ func InitRouter() {
 	gin.SetMode(utils.AppMode)
 	//计划采用logrus，不使用gin自带的日志文件管理
 	r := gin.New() //此处可以用Default或者New，区别是Default默认加了两个中间件-日志文件和错误恢复
+	r.Use(middleware.Logger())
 	r.Use(gin.Recovery())
 
 	//初始路由，由于采用前后端分离以及版本控制，所以使用路由组
