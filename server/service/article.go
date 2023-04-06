@@ -17,24 +17,26 @@ func CreateArticle(data *model.Article) int {
 // todo 显示文章总数
 
 // ShowArticles 查询文章列表
-func ShowArticles(pageSize int, pageNum int) ([]model.Article, int) {
+func ShowArticles(pageSize int, pageNum int) ([]model.Article, int, int64) {
 	var arti []model.Article
-	err := model.DB.Preload("Category").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&arti).Error //分页通用做法
+	var totalNum int64
+	err := model.DB.Preload("Category").Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&arti).Count(&totalNum).Error //分页通用做法
 	//如果err不为空，并且gorm的ErrRecordNotFound不为空，则异常，返回nil
 	if err != nil {
-		return nil, errmsg.ERROR
+		return nil, errmsg.ERROR, 0
 	}
-	return arti, errmsg.SUCCESS
+	return arti, errmsg.SUCCESS, totalNum
 }
 
 // ShowCategoryArticles 显示分类下所有文章
-func ShowCategoryArticles(id int, pageSize int, pageNum int) ([]model.Article, int) {
+func ShowCategoryArticles(id int, pageSize int, pageNum int) ([]model.Article, int, int64) {
 	var cateArti []model.Article
-	err := model.DB.Preload("Category").Limit(pageSize).Offset((pageNum-1)*pageSize).Where("cid = ?", id).Find(&cateArti).Error
+	var totalNum int64
+	err := model.DB.Preload("Category").Limit(pageSize).Offset((pageNum-1)*pageSize).Where("cid = ?", id).Find(&cateArti).Count(&totalNum).Error
 	if err != nil {
-		return nil, errmsg.ERROR_CATEGORY_NOT_EXIST
+		return nil, errmsg.ERROR_CATEGORY_NOT_EXIST, 0
 	}
-	return cateArti, errmsg.SUCCESS
+	return cateArti, errmsg.SUCCESS, totalNum
 }
 
 // ShowSingleArticle 查看单个文章内容

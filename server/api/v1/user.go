@@ -7,6 +7,7 @@ import (
 	"starblog/model"
 	"starblog/service"
 	"starblog/utils/errmsg"
+	"starblog/utils/validator"
 	"strconv"
 )
 
@@ -16,31 +17,42 @@ import (
 func AddUser(c *gin.Context) {
 	var data model.User
 	_ = c.ShouldBindJSON(&data)
-	if data.Username != "" && data.Password != "" {
-		code := service.CheckUser(data.Username)
-		if code == errmsg.SUCCESS {
-			service.CreateUser(&data)
-		} else if code == errmsg.ERROR_USERNAME_USED {
-			code = errmsg.ERROR_USERNAME_USED
-		} else {
-			code = errmsg.ERROR
-		}
-
+	msg, validCode := validator.Validate(&data)
+	if validCode != errmsg.SUCCESS {
 		c.JSON(http.StatusOK, gin.H{
-			"status":  code,
-			"data":    data,
-			"message": errmsg.GetErrMsg(code),
+			"status":  validCode,
+			"massage": msg,
 		})
-	} else {
-		code := errmsg.ERROR_USERNAME_OR_PASSWORD_IS_EMPTY
-		c.JSON(http.StatusBadRequest, gin.H{
-			"status":  code,
-			"data":    data,
-			"message": errmsg.GetErrMsg(code),
-		})
+		c.Abort()
+		return
 	}
-
+	//if data.Username != "" && data.Password != "" {
+	//	code := service.CheckUser(data.Username)
+	//	if code == errmsg.SUCCESS {
+	//		service.CreateUser(&data)
+	//	} else if code == errmsg.ERROR_USERNAME_USED {
+	//		code = errmsg.ERROR_USERNAME_USED
+	//	} else {
+	//		code = errmsg.ERROR
+	//	}
+	code := service.CheckUser(data.Username)
+	if code == errmsg.SUCCESS {
+		service.CreateUser(&data)
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
+		"message": errmsg.GetErrMsg(code),
+	})
 }
+
+//else {
+//	code := errmsg.ERROR_USERNAME_OR_PASSWORD_IS_EMPTY
+//	c.JSON(http.StatusBadRequest, gin.H{
+//		"status":  code,
+//		"message": errmsg.GetErrMsg(code),
+//	})
+
+//}
 
 // ShowUsers 显示用户列表
 func ShowUsers(c *gin.Context) {
@@ -55,12 +67,13 @@ func ShowUsers(c *gin.Context) {
 		pageNum = 1
 	}
 	//传给model中的ShowUser函数，返回一个user切片
-	data := service.ShowUsers(pageSize, pageNum)
+	data, totalNum := service.ShowUsers(pageSize, pageNum)
 	//将数据传递给前端展示
 	c.JSON(http.StatusOK, gin.H{
-		"status":  errmsg.SUCCESS,
-		"data":    data,
-		"message": errmsg.GetErrMsg(errmsg.SUCCESS),
+		"status":   errmsg.SUCCESS,
+		"TotalNum": totalNum,
+		"data":     data,
+		"message":  errmsg.GetErrMsg(errmsg.SUCCESS),
 	})
 
 }

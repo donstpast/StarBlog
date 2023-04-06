@@ -26,17 +26,16 @@ func CreateCategory(data *model.Category) int {
 }
 
 // ShowCategories 查询分类列表
-func ShowCategories(pageSize int, pageNum int) []model.Category {
+func ShowCategories(pageSize int, pageNum int) ([]model.Category, int64) {
 	var cate []model.Category
-	err := model.DB.Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&cate).Error //分页通用做法
+	var totalNum int64
+	err := model.DB.Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&cate).Count(&totalNum).Error //分页通用做法
 	//如果err不为空，并且gorm的ErrRecordNotFound不为空，则异常，返回nil
 	if err != nil {
-		return nil
+		return nil, 0
 	}
-	return cate
+	return cate, totalNum
 }
-
-//todo 显示分类下所有文章
 
 // EditCategory 编辑分类
 func EditCategory(id int, data *model.Category) int {

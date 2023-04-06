@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"starblog/model"
 	"starblog/utils/crypt"
 	"starblog/utils/errmsg"
@@ -28,16 +27,16 @@ func CreateUser(data *model.User) int {
 }
 
 // ShowUsers 查询用户列表
-func ShowUsers(pageSize int, pageNum int) []model.User {
+func ShowUsers(pageSize int, pageNum int) ([]model.User, int64) {
 	var users []model.User
-	fmt.Println("this ", pageSize)
-	err := model.DB.Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&users).Error //分页通用做法
+	var totalNum int64
+	err := model.DB.Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&users).Count(&totalNum).Error //分页通用做法
 	//如果err不为空，并且gorm的ErrRecordNotFound不为空，则异常，返回nil
 	//&& result.Error != gorm.ErrRecordNotFound会报错，暂时不加，之后解决
 	if err != nil {
-		return nil
+		return nil, 0
 	}
-	return users
+	return users, totalNum
 }
 
 // EditUser 编辑用户
@@ -90,7 +89,7 @@ func CheckLogin(username string, password string) (model.User, int) {
 	if !isEqual {
 		return user, errmsg.ERROR_PASSWORD_WRONG
 	}
-	if user.Role != 0 {
+	if user.Role != 1 {
 		return user, errmsg.ERROR_USER_NOT_ADMIN
 	}
 	return user, errmsg.SUCCESS

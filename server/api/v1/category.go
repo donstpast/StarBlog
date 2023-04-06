@@ -48,12 +48,13 @@ func ShowCategories(c *gin.Context) {
 		pageNum = 1
 	}
 	//传给model中的ShowUser函数，返回一个user切片
-	data := service.ShowCategories(pageSize, pageNum)
+	data, totalNum := service.ShowCategories(pageSize, pageNum)
 	//将数据传递给前端展示
 	c.JSON(http.StatusOK, gin.H{
-		"status":  errmsg.SUCCESS,
-		"data":    data,
-		"message": errmsg.GetErrMsg(errmsg.SUCCESS),
+		"status":   errmsg.SUCCESS,
+		"TotalNum": totalNum,
+		"data":     data,
+		"message":  errmsg.GetErrMsg(errmsg.SUCCESS),
 	})
 
 }

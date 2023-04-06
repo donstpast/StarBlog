@@ -35,12 +35,13 @@ func ShowArticles(c *gin.Context) {
 		pageNum = 1
 	}
 	//传给model中的ShowArticles函数，返回一个user切片
-	data, code := service.ShowArticles(pageSize, pageNum)
+	data, code, totalNum := service.ShowArticles(pageSize, pageNum)
 	//将数据传递给前端展示
 	c.JSON(http.StatusOK, gin.H{
-		"status":  code,
-		"data":    data,
-		"message": errmsg.GetErrMsg(code),
+		"status":   code,
+		"TotalNum": totalNum,
+		"data":     data,
+		"message":  errmsg.GetErrMsg(code),
 	})
 
 }
@@ -59,12 +60,13 @@ func ShowCategoryArticles(c *gin.Context) {
 		pageNum = 1
 	}
 	//传给model中的ShowCategoryArticles函数，返回一个user切片
-	data, code := service.ShowCategoryArticles(id, pageSize, pageNum)
+	data, code, totalNum := service.ShowCategoryArticles(id, pageSize, pageNum)
 	//将数据传递给前端展示
 	c.JSON(http.StatusOK, gin.H{
-		"status":  code,
-		"data":    data,
-		"message": errmsg.GetErrMsg(code),
+		"status":   code,
+		"TotalNum": totalNum,
+		"data":     data,
+		"message":  errmsg.GetErrMsg(code),
 	})
 }
 
