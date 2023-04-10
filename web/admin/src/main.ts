@@ -20,8 +20,6 @@ const app = createApp(App)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
   }
-// 将 axios 挂载到全局，之后在组件中可以通过 this.$http 使用
-app.config.globalProperties.$http = axios
 // 安装 Pinia 状态管理插件
 app.use(createPinia())
 // 安装 ElementPlus 组件库

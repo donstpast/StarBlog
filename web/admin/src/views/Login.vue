@@ -2,28 +2,29 @@ import type { ElForm } from 'element-plus';
 
 <template>
   <div class="contain">
-    <div class="loginbox">
-      <el-form class="loginform">
-        <el-form-item style="margin-bottom: 30px">
-          <el-input v-model="username" type="text" placeholder="请输入用户名" >
+    <div class="loginBox">
+      <el-form
+        ref="loginFormRef"
+        :model="formData"
+        :rules="rules"
+        class="loginForm"
+      >
+        <el-form-item prop="username" style="margin-bottom: 30px">
+          <el-input v-model="formData.username" type="text" placeholder="请输入用户名" >
             <template #prefix>
               <el-icon class="el-input__icon"><user /></el-icon>
             </template>
           </el-input>
         </el-form-item>
-        <el-form-item>
-          <el-input v-model="password" type="password" placeholder="请输入密码" show-password>
+        <el-form-item prop="password">
+          <el-input v-model="formData.password" type="password" placeholder="请输入密码" show-password>
             <template #prefix>
               <el-icon class="el-input__icon"><key /></el-icon>
             </template>
           </el-input>
-
-
-
         </el-form-item>
-        <el-form-item class="loginbtn">
-          <el-button type="primary" style="margin-right: 30px">Login</el-button>
-          <el-button style="margin-left: 30px">Cancel</el-button>
+        <el-form-item class="formBtn">
+          <el-button class="loginBtn" type="primary" @click="login(loginFormRef)" style="margin-right: 30px">登录</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -34,7 +35,7 @@ import type { ElForm } from 'element-plus';
   height: 100%;
   width: auto;
 }
-.loginbox {
+.loginBox {
   width: 450px;
   height: 300px;
   background-color: rgb(255, 255, 255, 0.5);
@@ -44,23 +45,75 @@ import type { ElForm } from 'element-plus';
   transform: translate(-50%, -50%);
   border-radius: 9px;
 }
-.loginform {
+.loginForm {
   width: 100%;
   position: absolute;
   bottom: 20%;
   padding: 0 30px;
   box-sizing: border-box;
 }
-.loginbtn {
+.formBtn {
   display: flex;
   justify-content: flex-end;
   margin-top: 30px;
   padding: 0 90px;
 }
+.loginBtn {
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px 90px;
+}
 </style>
 <script lang="ts" setup>
-import { ref } from 'vue'
-const username = ref('')
-const password = ref('')
+import axios from 'axios'
+import { reactive,ref } from "vue";
+import type { FormInstance, FormRules } from 'element-plus'
+import { ElMessage } from 'element-plus'
+
+
+const loginFormRef = ref<FormInstance>()
+const formData = reactive({
+  username: '',
+  password: ''
+})
+
+const rules = reactive<FormRules>({
+  username:[
+    {
+      required: true,
+      message: '用户名不能为空',
+      trigger: 'blur'
+    },
+    { min: 1,max:40, message: '用户名长度为1-40个字符', trigger: 'blur' }
+  ],
+  password:[
+    {required: true, message: '密码不能为空', trigger: 'blur'},
+    { min: 4,max:40, message: '密码长度为4-40个字符', trigger: 'blur' }
+
+  ]
+})
+
+
+const login = async (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  await formEl.validate(async (valid) => {
+    if (valid) {
+      try {
+        const response = await axios.post('http://127.0.0.1:8383/api/v1/login', formData);
+        console.log(response.data); // 处理成功响应
+
+      } catch (error) {
+        console.log(error); // 处理错误响应
+      }
+    } else {
+      ElMessage({
+        message: '请正确填写表单.',
+        type: 'error',
+        duration: 2000,
+      });
+    }
+  });
+};
+
 
 </script>

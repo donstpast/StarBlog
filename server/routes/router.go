@@ -15,6 +15,7 @@ func InitRouter() {
 	r := gin.New() //此处可以用Default或者New，区别是Default默认加了两个中间件-日志文件和错误恢复
 	r.Use(middleware.Logger())
 	r.Use(gin.Recovery())
+	r.Use(middleware.Cors())
 
 	//初始路由，由于采用前后端分离以及版本控制，所以使用路由组
 	//分为权限组路由，和公共路由
