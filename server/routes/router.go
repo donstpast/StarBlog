@@ -11,8 +11,8 @@ import (
 // InitRouter 创建公用类
 func InitRouter() {
 	gin.SetMode(utils.AppMode)
-	//计划采用logrus，不使用gin自带的日志文件管理
-	r := gin.New() //此处可以用Default或者New，区别是Default默认加了两个中间件-日志文件和错误恢复
+	//计划采用logrus保存为日志文件，同时使用gin自带的日志在终端显示
+	r := gin.Default() //此处可以用Default或者New，区别是Default默认加了两个中间件-日志文件和错误恢复
 	r.Use(middleware.Logger())
 	r.Use(gin.Recovery())
 	r.Use(middleware.Cors())
