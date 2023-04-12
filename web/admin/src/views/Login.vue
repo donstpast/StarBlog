@@ -1,4 +1,5 @@
 import type { ElForm } from 'element-plus';
+
 <template>
   <div class="contain">
     <div class="loginBox">
@@ -91,7 +92,6 @@ const login = async (formEl: FormInstance | undefined) => {
     if (valid) {
       try {
         const response = await axios.post('http://127.0.0.1:8383/api/v1/login', formData);
-        console.log(response.data); // 处理成功响应
         if (response.data.status != 200)
           return ElMessage({
             message:response.data.message,

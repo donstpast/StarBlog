@@ -76,6 +76,9 @@
   - [x] 完成login业务逻辑
   - [x] 实现了sessionstorage的存储与进行页面认证判断
   - [x] 分配了admin布局与组件
+- 2023.04.12
+  - [x] 规划admin页面内容
+  - [x] 完成退出登录功能
 
 # Todo
 - [x] ~~采用第三方库validator来进行数据校验~~
