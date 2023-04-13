@@ -1,5 +1,3 @@
-import type { ElForm } from 'element-plus';
-
 <template>
   <div class="contain">
     <div class="loginBox">
@@ -28,7 +26,6 @@ import type { ElForm } from 'element-plus';
             placeholder="请输入密码"
             show-password
             @keydown.enter="login(loginFormRef)"
-
           >
             <template #prefix>
               <el-icon class="el-input__icon"><key /></el-icon>
@@ -98,7 +95,7 @@ const login = async (formEl: FormInstance | undefined) => {
             type:"error",
           })
         sessionStorage.setItem('token',response.data.token)
-        await router.push('admin')
+        await router.push('/')
 
       } catch (error) {
         console.log(error); // 处理错误响应

@@ -1,13 +1,13 @@
 <template>
     <el-container class="contain">
-        <el-aside width="200px" class="containAside">
+        <el-aside width="230px" class="containAside">
             <Nav />
         </el-aside>
         <el-container>
             <el-header class="containHeader">
                 <Header/>
             </el-header>
-            <el-main>
+            <el-main class="containMain">
                 <router-view></router-view>
             </el-main>
             <el-footer class="containFooter">
@@ -24,7 +24,6 @@ import Nav from "@/components/admin/Nav.vue"
 <style scoped>
 .contain {
     height: 100%;
-    width: auto;
 }
 .containAside {
     background: rgb(51,58,69);
@@ -35,10 +34,10 @@ import Nav from "@/components/admin/Nav.vue"
     justify-content: flex-end;
     align-items: center;
 }
+.containMain {
+}
 .containFooter {
     background: rgba(255,255,255,0.5);
     align-items: center;
-
-
 }
 </style>

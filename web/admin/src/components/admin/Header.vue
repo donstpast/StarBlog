@@ -1,16 +1,31 @@
 <template>
-  <div class="header">
-    <el-button type="danger" @click="logout" round>退出</el-button>
-  </div>
+  <el-menu
+    class="header"
+    background-color="#00000000"
+    mode="horizontal"
+    :ellipsis="false"
+  >
+    <el-sub-menu index="0">
+      <template #title>账户</template>
+      <el-menu-item index="0-1">个人资料</el-menu-item>
+      <el-menu-item index="0-2">撰写文章</el-menu-item>
+      <el-menu-item index="0-3">系统配置</el-menu-item>
+      <el-menu-item index="0-3" @click="logout">退出登录</el-menu-item>
+    </el-sub-menu>
+  </el-menu>
 </template>
 
 <script lang="ts" setup>
 import router from "@/router";
 const logout = () => {
-  sessionStorage.clear()
+  sessionStorage.removeItem("token")
   router.push("/login")
 }
+
 </script>
 
 <style scoped>
+.header {
+    border-bottom: none;
+}
 </style>

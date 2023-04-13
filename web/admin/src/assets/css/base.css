@@ -11,3 +11,11 @@ body {
     background-attachment: fixed;
     background-size: cover;
 }
+.el-card {
+    margin-top: 20px;
+}
+.el-pagination  {
+    margin-top: 25px;
+    display: flex;
+    justify-content: flex-end;
+}

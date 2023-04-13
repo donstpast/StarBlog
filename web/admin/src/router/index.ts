@@ -1,6 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'  // 导入 createRouter 和 createWebHistory 函数，用于创建路由器和路由历史
-import Login from '../views/Login.vue' // 导入登录页面组件
-import Admin from '../views/Admin.vue' // 导入后台管理页面组件
+import Login from '@/views/Login.vue' // 导入登录页面组件
+import Admin from '@/views/Admin.vue' // 导入后台管理页面组件
+// 导入页面路由组件
+import writeArticle from "@/components/article/writeArticle.vue";
+import ArticleList from "@/components/article/Article.vue";
+import CategoryList from "@/components/category/Category.vue";
+import userList from "@/components/user/user-list.vue"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL), // 创建路由历史
@@ -8,13 +13,51 @@ const router = createRouter({
     {
       path: '/login', // 登录页面路由
       name: 'login', // 路由名称
+      meta : {
+        title : "login"
+      },
       component: Login // 组件
     },
     {
-      path: '/admin', // 后台管理页面路由
+      path: '/', // 后台管理页面路由
       name: 'admin', // 路由名称
       component : Admin, // 组件
-      meta: { requiresAuth: true } // 添加需要认证的标识
+      meta: {
+        title: "admin",
+        requiresAuth: true
+      }, // 添加需要认证的标识
+      children : [
+        {
+          path: 'write-article',
+          component:writeArticle,
+          meta:{
+            title: '添加文章'
+          }
+        },
+        {
+          path: 'Article',
+          component:ArticleList,
+          name: 'Article',
+          meta:{
+            title: '文章列表'
+          }
+        },
+        {
+          path: 'Category',
+          component:CategoryList,
+          meta:{
+            title: '分类列表'
+          }
+        },
+        {
+          path: 'User',
+          component:userList,
+          meta:{
+            title: '用户列表'
+          }
+        },
+
+      ]
     }
   ]
 })
