@@ -58,6 +58,7 @@ func AddUser(c *gin.Context) {
 func ShowUsers(c *gin.Context) {
 	pageSize, _ := strconv.Atoi(c.Query("pagesize"))
 	pageNum, _ := strconv.Atoi(c.Query("pagenum"))
+	userName := c.Query("username")
 	//如果pageSize或者pageNum为0，则进行gorm中的 Cancel limit condition with -1
 	//例子：db.Limit(10).Find(&users1).Limit(-1).Find(&users2)
 	if pageSize == 0 {
@@ -67,7 +68,7 @@ func ShowUsers(c *gin.Context) {
 		pageNum = 1
 	}
 	//传给model中的ShowUser函数，返回一个user切片
-	data, totalNum := service.ShowUsers(pageSize, pageNum)
+	data, totalNum := service.ShowUsers(userName, pageSize, pageNum)
 	//将数据传递给前端展示
 	c.JSON(http.StatusOK, gin.H{
 		"status":   errmsg.SUCCESS,

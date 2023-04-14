@@ -88,7 +88,7 @@ const login = async (formEl: FormInstance | undefined) => {
   await formEl.validate(async (valid) => {
     if (valid) {
       try {
-        const response = await axios.post('http://127.0.0.1:8383/api/v1/login', formData);
+        const response = await axios.post('login', formData);
         if (response.data.status != 200)
           return ElMessage({
             message:response.data.message,

@@ -1,6 +1,8 @@
 package service
 
 import (
+	"fmt"
+	"gorm.io/gorm"
 	"starblog/model"
 	"starblog/utils/crypt"
 	"starblog/utils/errmsg"
@@ -27,13 +29,19 @@ func CreateUser(data *model.User) int {
 }
 
 // ShowUsers 查询用户列表
-func ShowUsers(pageSize int, pageNum int) ([]model.User, int64) {
+func ShowUsers(userName string, pageSize int, pageNum int) ([]model.User, int64) {
+	var err error
 	var users []model.User
 	var totalNum int64
-	err := model.DB.Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&users).Count(&totalNum).Error //分页通用做法
+	if userName == "" {
+		err = model.DB.Offset((pageNum - 1) * pageSize).Limit(pageSize).Find(&users).Error //分页通用做法
+	} else {
+		err = model.DB.Where("username LIKE ?", fmt.Sprintf("%%%s%%", userName)).Offset((pageNum - 1) * pageSize).Limit(pageSize).Find(&users).Error
+	}
+	model.DB.Model(&users).Count(&totalNum)
 	//如果err不为空，并且gorm的ErrRecordNotFound不为空，则异常，返回nil
 	//&& result.Error != gorm.ErrRecordNotFound会报错，暂时不加，之后解决
-	if err != nil {
+	if err != nil && err != gorm.ErrRecordNotFound {
 		return nil, 0
 	}
 	return users, totalNum
