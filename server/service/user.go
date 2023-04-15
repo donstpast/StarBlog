@@ -34,17 +34,27 @@ func ShowUsers(userName string, pageSize int, pageNum int) ([]model.User, int64)
 	var users []model.User
 	var totalNum int64
 	if userName == "" {
-		err = model.DB.Offset((pageNum - 1) * pageSize).Limit(pageSize).Find(&users).Error //分页通用做法
+		err = model.DB.Model(&users).Count(&totalNum).Offset((pageNum - 1) * pageSize).Limit(pageSize).Find(&users).Error //分页通用做法
 	} else {
-		err = model.DB.Where("username LIKE ?", fmt.Sprintf("%%%s%%", userName)).Offset((pageNum - 1) * pageSize).Limit(pageSize).Find(&users).Error
+		err = model.DB.Model(&users).Where("username LIKE ?", fmt.Sprintf("%%%s%%", userName)).Count(&totalNum).Offset((pageNum - 1) * pageSize).Limit(pageSize).Find(&users).Error
+		//model.DB.Model(&users).Where("username LIKE ?", fmt.Sprintf("%%%s%%", userName)).Count(&totalNum)
 	}
-	model.DB.Model(&users).Count(&totalNum)
 	//如果err不为空，并且gorm的ErrRecordNotFound不为空，则异常，返回nil
 	//&& result.Error != gorm.ErrRecordNotFound会报错，暂时不加，之后解决
-	if err != nil && err != gorm.ErrRecordNotFound {
+	if err != nil && err == gorm.ErrRecordNotFound {
 		return nil, 0
 	}
 	return users, totalNum
+}
+
+// ShowUserInfo 查询单个用户信息
+func ShowUserInfo(id int) (model.User, int) {
+	var user model.User
+	err := model.DB.Where("id = ?", id).First(&user).Error
+	if err != nil {
+		return user, errmsg.ERROR_USER_NOT_EXIST
+	}
+	return user, errmsg.SUCCESS
 }
 
 // EditUser 编辑用户

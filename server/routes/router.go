@@ -30,6 +30,8 @@ func InitRouter() {
 		{
 			//查看用户列表
 			user.GET("/list", v1.ShowUsers)
+			//查看用户信息
+			user.GET("/:id", v1.ShowUserInfo)
 			//编辑用户
 			user.PUT("/:id", v1.EditUser)
 			//删除用户

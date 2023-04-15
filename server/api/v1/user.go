@@ -79,7 +79,16 @@ func ShowUsers(c *gin.Context) {
 
 }
 
-//查询单个用户
+// ShowUserInfo 查询单个用户信息
+func ShowUserInfo(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+	data, code := service.ShowUserInfo(id)
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
+		"data":    data,
+		"message": errmsg.GetErrMsg(code),
+	})
+}
 
 // EditUser 编辑用户
 func EditUser(c *gin.Context) {
