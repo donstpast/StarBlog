@@ -18,6 +18,21 @@ func CheckUser(name string) (code int) {
 	return errmsg.SUCCESS //200
 }
 
+// UpdateCheckUser 查询要更新的用户是否存在
+func UpdateCheckUser(id int, name string) (code int) {
+	var users model.User
+	model.DB.Select("id", "username").Where("username = ?", name).First(&users)
+	if users.ID == uint(id) {
+		return errmsg.SUCCESS
+	} else {
+		if users.ID > 0 {
+			return errmsg.ERROR_USERNAME_USED //1002 用户名已被使用
+		}
+		return errmsg.SUCCESS //200
+	}
+
+}
+
 // CreateUser  新增用户
 func CreateUser(data *model.User) int {
 	data.Password, data.Salt = crypt.PwScrypt(data.Password)
@@ -67,17 +82,25 @@ func EditUser(id int, data *model.User) int {
 		return errmsg.ERROR_USER_NOT_EXIST
 	}
 	//判断用户是否传入空值
-	if data.Username == "" {
+	if data == nil {
+		return errmsg.ERROR
+	} else if data.Username == "" {
 		return errmsg.ERROR_USERNAME_OR_PASSWORD_IS_EMPTY
+	} else if data.Role == 0 {
+		return errmsg.ERROE_ROLE_WRONG
+	} else if data.Password == "" {
+		maps["username"] = data.Username
+		maps["role"] = data.Role
 	} else {
 		maps["username"] = data.Username
-		err = model.DB.Model(&user).Where("id = ?", id).Updates(maps).Error
-		if err != nil {
-			return errmsg.ERROR
-		}
-		return errmsg.SUCCESS
+		maps["role"] = data.Role
+		maps["password"], maps["salt"] = crypt.PwScrypt(data.Password)
 	}
-
+	err = model.DB.Model(&user).Where("id = ?", id).Updates(maps).Error
+	if err != nil {
+		return errmsg.ERROR
+	}
+	return errmsg.SUCCESS
 }
 
 // DelUser 删除用户

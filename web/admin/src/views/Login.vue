@@ -74,9 +74,9 @@ const rules = reactive<FormRules>({
       trigger: 'blur'
     },
     {
-      min: 4,
+      min: 6,
       max:40,
-      message: '密码长度为4-40个字符',
+      message: '密码长度为6-40个字符',
       trigger: 'blur'
     }
   ]

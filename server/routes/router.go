@@ -36,6 +36,8 @@ func InitRouter() {
 			user.PUT("/:id", v1.EditUser)
 			//删除用户
 			user.DELETE("/:id", v1.DelUser)
+			//添加用户
+			user.POST("/add", v1.AddUser)
 		}
 		//Article模块的路由接口
 		article := authV1.Group("/article")

@@ -43,7 +43,7 @@
             <!-- 编辑按钮 -->
             <el-button
               size="small"
-              @click="handleEdit(scope.$index, scope.row)"
+              @click="editUserBtn(scope.row)"
             >Edit
             </el-button>
             <!-- 删除按钮 -->
@@ -68,12 +68,18 @@
     </el-card>
 <!-- 新增用户表单 -->
     <!-- Form -->
-    <el-dialog v-model="addUserFormVisible" title="新增用户" width="30%">
-      <el-form :model="addUserForm">
-        <el-form-item label="用户名" :label-width="formLabelWidth">
-          <el-input v-model="addUserForm.name" autocomplete="off" />
+    <el-dialog v-model="addUserFormVisible" title="新增用户" width="30%" @close="clearForm(addUserRef)">
+      <el-form
+        :rules="addUserRules"
+        :model="addUserForm"
+        ref="addUserRef"
+        hide-required-asterisk
+        status-icon
+      >
+        <el-form-item label="用户名" :label-width="formLabelWidth" prop="username">
+          <el-input v-model="addUserForm.username" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="密码" :label-width="formLabelWidth">
+        <el-form-item label="密码" :label-width="formLabelWidth" prop="password">
           <el-input
             v-model="addUserForm.password"
             type="password"
@@ -81,7 +87,7 @@
             show-password
           />
         </el-form-item>
-        <el-form-item label="确认密码" :label-width="formLabelWidth">
+        <el-form-item label="确认密码" :label-width="formLabelWidth" prop="confirmPass">
           <el-input
             v-model="addUserForm.confirmPass"
             type="password"
@@ -89,10 +95,9 @@
             show-password
           />
         </el-form-item>
-        <el-form-item label="权限" :label-width="formLabelWidth">
+        <el-form-item label="权限" :label-width="formLabelWidth" prop="role">
           <el-select
             v-model="addUserForm.role"
-            default-first-option
             @change="roleChange"
           >
             <el-option label="普通用户" value="2"  />
@@ -102,8 +107,53 @@
       </el-form>
       <template #footer>
       <span class="dialog-footer">
-        <el-button @click="addUserFormVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="addUserFormVisible = false">
+        <el-button @click="addUserFormVisible = false" >Cancel</el-button>
+        <el-button type="primary" @click="addUserFormVisible;addUser(addUserRef)">
+          Confirm
+        </el-button>
+      </span>
+      </template>
+    </el-dialog>
+<!-- 编辑用户表单 -->
+    <!-- Form -->
+    <el-dialog v-model="editUserFormVisible" title="编辑用户" width="30%" @close="clearForm(editUserRef)">
+      <el-form
+        :rules="editUserRules"
+        :model="editUserForm"
+        ref="editUserRef"
+        hide-required-asterisk
+        status-icon
+      >
+        <el-form-item label="用户名" :label-width="formLabelWidth" prop="username">
+          <el-input
+            v-model="editUserForm.username"
+            :clearable = true
+            autocomplete="off"
+          />
+        </el-form-item>
+        <el-form-item label="密码" :label-width="formLabelWidth" prop="password">
+          <el-input
+            v-model="editUserForm.password"
+            :clearable = true
+            type="password"
+            autocomplete="off"
+            show-password
+          />
+        </el-form-item>
+        <el-form-item label="权限" :label-width="formLabelWidth" prop="role">
+          <el-select
+            v-model="editUserForm.role"
+            @change="roleChange"
+          >
+            <el-option label="普通用户" value="2"  />
+            <el-option label="管理员" value="1" />
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="editUserFormVisible = false" >Cancel</el-button>
+        <el-button type="primary" @click="editUserFormVisible;editUser(userList,editUserRef)">
           Confirm
         </el-button>
       </span>
@@ -114,7 +164,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ElMessage, ElPagination, ElMessageBox} from "element-plus";
+import type { FormInstance, FormRules } from 'element-plus'
+import { ElMessage, ElPagination, ElMessageBox } from "element-plus";
 import axios from "axios";
 import { onMounted, ref ,reactive} from "vue";
 import UserList from "@/components/user/user-list.vue";
@@ -122,15 +173,110 @@ import UserList from "@/components/user/user-list.vue";
 const userList = ref([]); //列表数据
 const total = ref(0); //记录总数
 const pageSize = ref(10); //分页大小
-const currentPage = ref(1); //当前页数
+const currentPage = ref(1); //当前页
 const searchData = ref('');   //搜索数据
 const addUserFormVisible = ref(false) //添加用户表单对话框
+const editUserFormVisible = ref(false) //编辑用户表单对话框
+
 const formLabelWidth = '80px'  //表单宽度
+const addUserRef = ref<FormInstance>()
+const editUserRef = ref<FormInstance>()
 const addUserForm = reactive({
-  name: '',
+  username: '',
   password: '',
-  confirmPass:"",
-  role:"",
+  confirmPass:'',
+  role:'2',
+})
+const editUserForm = reactive({
+  id : '',
+  username: '',
+  password: '',
+  role:'',
+})
+//新增用户采用的规则
+const addUserRules = reactive<FormRules>({
+  username:[
+    {
+      required: true,
+      message: '用户名不能为空',
+      trigger: 'blur'
+    },
+    {
+      min: 1,
+      max:40,
+      message: '用户名长度为1-40个字符',
+      trigger: 'blur'
+    }
+  ],
+  password:[
+    {
+      required: true,
+      validator: (rule: any, value: any, callback: any) => {
+        if (value === '') {
+          callback(new Error('密码不能为空'))
+        } else {
+          if (addUserForm.confirmPass !== '') {
+            if (!addUserRef.value) return
+            addUserRef.value.validateField('confirmPass', () => null)
+          }
+          callback()
+        }
+      },
+      trigger: 'blur'
+    },
+    {
+      min: 6,
+        max:40,
+      message: '密码长度为6-40个字符',
+      trigger: 'blur'
+    }
+  ],
+  confirmPass:[
+    {
+      required: true,
+      validator: (rule: any, value: any, callback: any) => {
+        if (value === '') {
+          callback(new Error('请再次输入密码'))
+        } else if (value !== addUserForm.password) {
+          callback(new Error("两次密码输入不一致，请检查"))
+        } else {
+          callback()
+        }
+      },
+      trigger: 'blur'
+    }
+  ],
+})
+//编辑用户采用的规则
+const editUserRules = reactive<FormRules>({
+  username:[
+    {
+      required: true,
+      message: '用户名不能为空',
+      trigger: 'blur'
+    },
+    {
+      min: 1,
+      max:40,
+      message: '用户名长度为1-40个字符',
+      trigger: 'blur'
+    }
+  ],
+  password:[
+    {
+      validator: (rule: any, value: any, callback: any) => {
+        if (value !== '') {
+          if ([...editUserForm.password].length < 6 || [...editUserForm.password].length > 40) {
+            callback(new Error('密码长度为6-10个字符'))
+          } else {
+            callback()
+          }
+        }
+          callback()
+      },
+      trigger: 'blur'
+    }
+  ]
 })
 
 // 显示用户列表
@@ -182,10 +328,52 @@ const roleChange = (value :any) => {
 }
 
 // 定义一个函数，用于处理用户编辑事件
-const handleEdit = (index: number, row: UserList) => {
-// 打印出被编辑的用户的索引和信息
-  console.log(index, row)
+const editUserBtn = async (userList: UserList) => {
+// // 打印出被编辑的用户的索引和信息
+  editUserFormVisible.value = true;
+  editUserForm.id = userList.ID
+  editUserForm.username = userList.username;
+  editUserForm.role = userList.role.toString()
+  return userList.ID;
 }
+const editUser = async (userList: UserList,formEl: FormInstance | undefined) => {
+  console.log(formEl)
+  if (!formEl) return;
+  await formEl.validate(async (valid) => {
+    if (valid) {
+      try{
+        const user_id = parseInt(editUserForm.id)
+        console.log(user_id)
+        const response  = await axios.put(`user/${user_id}`,{
+          username:editUserForm.username,
+          password:editUserForm.password || '',
+          role:parseInt(editUserForm.role),
+        });
+        if (response.data.status != 200){
+          return ElMessage({
+            message:response.data.message,
+            type:"error",
+          })
+        } else {
+          editUserFormVisible.value = false
+          await showUsers();
+          return ElMessage({
+            message:"编辑用户成功",
+            type:"success",
+          })
+        }
+      } catch (error) {
+        console.log(error); // 处理错误响应
+      }
+    } else {
+      ElMessage({
+        message: '请正确填写表单.',
+        type: 'error',
+        duration: 2000,
+      });
+    }
+  });
+};
 
 // 定义一个异步函数，用于处理删除用户事件
 const deleteUser = async (userList: UserList) => {
@@ -235,10 +423,47 @@ const deleteUser = async (userList: UserList) => {
     }
   }
 };
-//新增用户表单
 
-
-
+const clearForm = (formEl: FormInstance | undefined)=> {
+  if (!formEl) return;
+  formEl?.resetFields()
+}
+//新增用户表单提交
+const addUser = async (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  await formEl.validate(async (valid) => {
+    if (valid) {
+      try{
+        const response = await axios.post('user/add', {
+          username:addUserForm.username,
+          password:addUserForm.password,
+          role:parseInt(addUserForm.role),
+        });
+        if (response.data.status != 200){
+          return ElMessage({
+            message:response.data.message,
+            type:"error",
+          })
+        } else {
+          addUserFormVisible.value = false
+          await showUsers();
+          return ElMessage({
+            message:"新增用户成功",
+            type:"success",
+          })
+        }
+      } catch (error) {
+        console.log(error); // 处理错误响应
+      }
+    } else {
+      ElMessage({
+        message: '请正确填写表单.',
+        type: 'error',
+        duration: 2000,
+      });
+    }
+  });
+};
 
 // 定义一个函数，用于响应用户选择每页显示条数的事件
 const handleSizeChange = (val: number) => {

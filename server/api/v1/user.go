@@ -2,8 +2,10 @@ package v1
 
 //导入gin包
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"starblog/middleware"
 	"starblog/model"
 	"starblog/service"
 	"starblog/utils/errmsg"
@@ -17,32 +19,55 @@ import (
 func AddUser(c *gin.Context) {
 	var data model.User
 	_ = c.ShouldBindJSON(&data)
-	msg, validCode := validator.Validate(&data)
-	if validCode != errmsg.SUCCESS {
+	username, exists := c.Get("username")
+	if !exists {
+		data.Role = 2
+		msg, validCode := validator.Validate(&data)
+		if validCode != errmsg.SUCCESS {
+			c.JSON(http.StatusOK, gin.H{
+				"status":  validCode,
+				"massage": msg,
+			})
+			c.Abort()
+			return
+		}
+		code := service.CheckUser(data.Username)
+		if code == errmsg.SUCCESS {
+			service.CreateUser(&data)
+		}
 		c.JSON(http.StatusOK, gin.H{
-			"status":  validCode,
-			"massage": msg,
+			"status":  code,
+			"message": errmsg.GetErrMsg(code),
 		})
-		c.Abort()
-		return
+	} else {
+		name := username.(*middleware.MyClaims).Username
+		// 判断是否认证
+		if code := service.CheckUser(name); code == errmsg.ERROR_USERNAME_USED {
+			//认证通过则不进行任何修改
+			fmt.Println(data.Role)
+		} else {
+			// 认证不通过则强制修改 Role 值为2
+			data.Role = 2
+		}
+		msg, validCode := validator.Validate(&data)
+		if validCode != errmsg.SUCCESS {
+			c.JSON(http.StatusOK, gin.H{
+				"status":  validCode,
+				"massage": msg,
+			})
+			c.Abort()
+			return
+		}
+		code := service.CheckUser(data.Username)
+		if code == errmsg.SUCCESS {
+			service.CreateUser(&data)
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"status":  code,
+			"message": errmsg.GetErrMsg(code),
+		})
 	}
-	//if data.Username != "" && data.Password != "" {
-	//	code := service.CheckUser(data.Username)
-	//	if code == errmsg.SUCCESS {
-	//		service.CreateUser(&data)
-	//	} else if code == errmsg.ERROR_USERNAME_USED {
-	//		code = errmsg.ERROR_USERNAME_USED
-	//	} else {
-	//		code = errmsg.ERROR
-	//	}
-	code := service.CheckUser(data.Username)
-	if code == errmsg.SUCCESS {
-		service.CreateUser(&data)
-	}
-	c.JSON(http.StatusOK, gin.H{
-		"status":  code,
-		"message": errmsg.GetErrMsg(code),
-	})
+
 }
 
 //else {
@@ -95,7 +120,18 @@ func EditUser(c *gin.Context) {
 	var data model.User
 	id, _ := strconv.Atoi(c.Param("id"))
 	_ = c.ShouldBindJSON(&data)
-	code := service.CheckUser(data.Username)
+	if data.Password != "" {
+		msg, validCode := validator.Validate(&data)
+		if validCode != errmsg.SUCCESS {
+			c.JSON(http.StatusOK, gin.H{
+				"status":  validCode,
+				"massage": msg,
+			})
+			c.Abort()
+			return
+		}
+	}
+	code := service.UpdateCheckUser(id, data.Username)
 	if code == errmsg.SUCCESS {
 		code = service.EditUser(id, &data)
 	}

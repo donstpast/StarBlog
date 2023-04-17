@@ -23,11 +23,12 @@ const (
 	ERROR_USERNAME_USED                 = 1002 //用户名已存在
 	ERROR_PASSWORD_WRONG                = 1003 //密码错误
 	ERROR_USERNAME_OR_PASSWORD_IS_EMPTY = 1004 //用户名或者密码为空
-	ERROR_USER_NOT_ADMIN                = 1005
+	ERROR_USER_NOT_ADMIN                = 1005 //用户不是管理员
 	ERROR_TOKEN_NOT_EXIST               = 1006 //token不存在
 	ERROR_TOKEN_OVERTIME                = 1007 //token过期
 	ERROR_TOKEN_WRONG                   = 1008 //token错误
 	ERROR_TOKEN_FORMAT_WRONG            = 1009 //token格式错误
+	ERROE_ROLE_WRONG                    = 1010 //role错误
 	//code在(2000,3000)为文章模块错误
 	ERROR_ARTICLE_NOT_EXIST = 2001 //文章不存在
 
@@ -53,6 +54,7 @@ var codeMsg = map[int]string{
 	ERROR_TOKEN_OVERTIME:                "TOKEN已过期",
 	ERROR_TOKEN_WRONG:                   "TOKEN错误",
 	ERROR_TOKEN_FORMAT_WRONG:            "TOKEN格式错误",
+	ERROE_ROLE_WRONG:                    "权限错误",
 	//文章模块错误码
 	ERROR_ARTICLE_NOT_EXIST: "文章不存在",
 	//分类模块错误码

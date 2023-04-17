@@ -17,6 +17,5 @@ type User struct {
 
 // BeforeCreate 权限控制Hook
 func (u *User) BeforeCreate(_ *gorm.DB) (err error) {
-	u.Role = 2
 	return nil
 }
