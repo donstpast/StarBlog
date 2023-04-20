@@ -33,20 +33,20 @@
         <el-icon><Document /></el-icon>
         <span>撰写</span>
       </template>
-      <el-menu-item index="write-article" disabled>编写文章(待开发)</el-menu-item>
-      <el-menu-item index="create-page" disabled>创建页面(待开发)</el-menu-item>
+      <el-menu-item index="/admin/write-article/">编写文章</el-menu-item>
+      <el-menu-item index="/admin/create-page" disabled>创建页面(待开发)</el-menu-item>
     </el-sub-menu>
     <el-sub-menu index="3" >
       <template #title>
         <el-icon><Star /></el-icon>
         <span>管理</span>
       </template>
-      <el-menu-item index="Article" disabled>文章(待开发)</el-menu-item>
+      <el-menu-item index="/admin/Article">文章</el-menu-item>
       <el-menu-item index="3-2" disabled>独立页面(待开发)</el-menu-item>
       <el-menu-item index="3-3" disabled>评论(待开发)</el-menu-item>
-      <el-menu-item index="Category" disabled>分类(待开发)</el-menu-item>
+      <el-menu-item index="/admin/Category">分类</el-menu-item>
       <el-menu-item index="3-5" disabled>标签(待开发)</el-menu-item>
-      <el-menu-item index="User" >用户</el-menu-item>
+      <el-menu-item index="/admin/User" >用户</el-menu-item>
       <el-menu-item index="3-7" disabled>友链(待开发)</el-menu-item>
       <el-menu-item index="3-8" disabled>文件(待开发)</el-menu-item>
     </el-sub-menu>
@@ -78,7 +78,7 @@ const handleClose = (key: string, keyPath: string[]) => {
 };
 
 onMounted(() => {
-  const targetPath = router.currentRoute.value.path.slice(1);
+  const targetPath = router.currentRoute.value.path.slice(6);
   if (targetPath.length === 0) {
     activeIndex.value = "1-1"
   }else {

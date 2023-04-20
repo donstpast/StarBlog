@@ -45,8 +45,6 @@ import { reactive,ref } from "vue";
 import type { FormInstance, FormRules } from 'element-plus'
 import { ElMessage } from 'element-plus'
 import router from "@/router";
-
-
 const loginFormRef = ref<FormInstance>()
 const formData = reactive({
   username: '',
@@ -95,7 +93,7 @@ const login = async (formEl: FormInstance | undefined) => {
             type:"error",
           })
         sessionStorage.setItem('token',response.data.token)
-        await router.push('/')
+        await router.push('/admin')
 
       } catch (error) {
         console.log(error); // 处理错误响应

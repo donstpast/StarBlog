@@ -114,6 +114,7 @@ func JwtToken() gin.HandlerFunc {
 		}
 
 		c.Set("username", claims)
+
 		c.Next()
 	}
 }

@@ -59,6 +59,17 @@ func ShowCategories(c *gin.Context) {
 
 }
 
+// ShowCategoryInfo 查询单个分类
+func ShowCategoryInfo(c *gin.Context) {
+	id, _ := strconv.Atoi(c.Param("id"))
+	data, code := service.ShowCategoryInfo(id)
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
+		"data":    data,
+		"message": errmsg.GetErrMsg(code),
+	})
+}
+
 //todo 查询单个分类下所有的文章
 
 // EditCategory 编辑分类

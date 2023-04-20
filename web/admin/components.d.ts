@@ -11,8 +11,9 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     AddArticle: typeof import('./src/components/article/addArticle.vue')['default']
     Article: typeof import('./src/components/article/Article.vue')['default']
-    ArticleList: typeof import('./src/components/article/articleList.vue')['default']
+    ArticleList: typeof import('./src/components/article/article-list.vue')['default']
     Category: typeof import('./src/components/category/Category.vue')['default']
+    CategoryList: typeof import('./src/components/category/category-list.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCard: typeof import('element-plus/es')['ElCard']
@@ -55,6 +56,6 @@ declare module '@vue/runtime-core' {
     RouterView: typeof import('vue-router')['RouterView']
     User: typeof import('./src/components/user/User.vue')['default']
     UserList: typeof import('./src/components/user/user-list.vue')['default']
-    WriteArticle: typeof import('./src/components/article/writeArticle.vue')['default']
+    WriteArticle: typeof import('./src/components/article/write-article.vue')['default']
   }
 }

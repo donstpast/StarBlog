@@ -3,6 +3,7 @@ package v1
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"starblog/middleware"
 	"starblog/model"
 	"starblog/service"
 	"starblog/utils/errmsg"
@@ -13,8 +14,24 @@ import (
 func AddArticle(c *gin.Context) {
 	var data model.Article
 	_ = c.ShouldBindJSON(&data)
-	code := service.CreateArticle(&data)
-	c.JSON(http.StatusBadRequest, gin.H{
+	username, exists := c.Get("username")
+	if !exists {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  errmsg.ERROR_TOKEN_NOT_EXIST,
+			"massage": errmsg.GetErrMsg(errmsg.ERROR_TOKEN_NOT_EXIST),
+		})
+		c.Abort()
+		return
+	}
+	name := username.(*middleware.MyClaims).Username
+	id, code := service.ShowUserID(name)
+	if data.Uid == 0 {
+		data.Uid = int(id)
+	}
+
+	code = service.CreateArticle(&data)
+
+	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
 		"data":    data,
 		"message": errmsg.GetErrMsg(code),
@@ -26,6 +43,7 @@ func AddArticle(c *gin.Context) {
 func ShowArticles(c *gin.Context) {
 	pageSize, _ := strconv.Atoi(c.Query("pagesize"))
 	pageNum, _ := strconv.Atoi(c.Query("pagenum"))
+	title := c.Query("title")
 	//如果pageSize或者pageNum为0，则进行gorm中的 Cancel limit condition with -1
 	//例子：db.Limit(10).Find(&users1).Limit(-1).Find(&users2)
 	if pageSize == 0 {
@@ -35,7 +53,7 @@ func ShowArticles(c *gin.Context) {
 		pageNum = 1
 	}
 	//传给model中的ShowArticles函数，返回一个user切片
-	data, code, totalNum := service.ShowArticles(pageSize, pageNum)
+	data, code, totalNum := service.ShowArticles(title, pageSize, pageNum)
 	//将数据传递给前端展示
 	c.JSON(http.StatusOK, gin.H{
 		"status":   code,

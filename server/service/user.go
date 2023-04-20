@@ -72,6 +72,16 @@ func ShowUserInfo(id int) (model.User, int) {
 	return user, errmsg.SUCCESS
 }
 
+// ShowUserID 查询用户ID
+func ShowUserID(username string) (uint, int) {
+	var user model.User
+	err := model.DB.Where("username = ?", username).First(&user).Error
+	if err != nil {
+		return 0, errmsg.ERROR_USER_NOT_EXIST
+	}
+	return user.ID, errmsg.SUCCESS
+}
+
 // EditUser 编辑用户
 func EditUser(id int, data *model.User) int {
 	var user model.User

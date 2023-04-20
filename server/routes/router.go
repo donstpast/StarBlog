@@ -75,9 +75,10 @@ func InitRouter() {
 		//查看单个文章内容
 		pubilcV1.GET("article/:id", v1.ShowSingleArticle)
 		//Category模块的路由接口
-
 		//查看分类列表
 		pubilcV1.GET("categories", v1.ShowCategories)
+		//查看单个分类信息
+		pubilcV1.GET("category/:id", v1.ShowCategoryInfo)
 		//查看单个分类下文章
 		pubilcV1.GET("category/articles/:id", v1.ShowCategoryArticles)
 

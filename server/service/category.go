@@ -8,8 +8,7 @@ import (
 // CheckCategory 查询分类名是否存在
 func CheckCategory(name string) (code int) {
 	var cate model.Category
-	_ = model.DB.Select("id").Where("name = ?", name).First(&cate).Error
-
+	_ = model.DB.Select("id", "name").Where("name = ?", name).First(&cate).Error
 	if cate.ID > 0 {
 		return errmsg.ERROR_CATEGORY_USED //3002 分类已存在
 	}
@@ -29,12 +28,22 @@ func CreateCategory(data *model.Category) int {
 func ShowCategories(pageSize int, pageNum int) ([]model.Category, int64) {
 	var cate []model.Category
 	var totalNum int64
-	err := model.DB.Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&cate).Count(&totalNum).Error //分页通用做法
+	err := model.DB.Model(&cate).Count(&totalNum).Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&cate).Error //分页通用做法
 	//如果err不为空，并且gorm的ErrRecordNotFound不为空，则异常，返回nil
 	if err != nil {
 		return nil, 0
 	}
 	return cate, totalNum
+}
+
+// ShowCategoryInfo 查询单个分类信息
+func ShowCategoryInfo(id int) (model.Category, int) {
+	var category model.Category
+	err := model.DB.Where("id = ?", id).First(&category).Error
+	if err != nil {
+		return category, errmsg.ERROR_CATEGORY_NOT_EXIST
+	}
+	return category, errmsg.SUCCESS
 }
 
 // EditCategory 编辑分类

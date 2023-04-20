@@ -42,11 +42,13 @@ func AdminLogin(c *gin.Context) {
 // token生成函数
 func setToken(c *gin.Context, user model.User) string {
 	j := middleware.NewJWT()
+
 	claims := middleware.MyClaims{
 		Username: user.Username,
 		StandardClaims: jwt.StandardClaims{
 			NotBefore: jwt.NewTime(float64(time.Now().Unix() - 100)),
 			ExpiresAt: jwt.NewTime(float64(time.Now().Unix() + 86400)),
+			ID:        string(user.ID),
 			Issuer:    "StarBlog",
 		},
 	}

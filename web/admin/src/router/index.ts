@@ -1,10 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'  // 导入 createRouter 和 createWebHistory 函数，用于创建路由器和路由历史
 import Login from '@/views/Login.vue' // 导入登录页面组件
 import Admin from '@/views/Admin.vue' // 导入后台管理页面组件
+
 // 导入页面路由组件
-import writeArticle from "@/components/article/writeArticle.vue";
-import ArticleList from "@/components/article/Article.vue";
-import CategoryList from "@/components/category/Category.vue";
+import writeArticle from "@/components/article/write-article.vue";
+import ArticleList from "@/components/article/article-list.vue";
+import CategoryList from "@/components/category/category-list.vue";
 import userList from "@/components/user/user-list.vue"
 
 const router = createRouter({
@@ -19,7 +20,7 @@ const router = createRouter({
       component: Login // 组件
     },
     {
-      path: '/', // 后台管理页面路由
+      path: '/admin', // 后台管理页面路由
       name: 'admin', // 路由名称
       component : Admin, // 组件
       meta: {
@@ -33,6 +34,11 @@ const router = createRouter({
           meta:{
             title: '添加文章'
           }
+        },
+        {
+          path: 'write-article/:id',
+          component: writeArticle,
+          props: true
         },
         {
           path: 'Article',

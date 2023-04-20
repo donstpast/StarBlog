@@ -36,7 +36,14 @@
       >
         <el-table-column prop="ID" label="ID" align="center" width="180" />
         <el-table-column prop="username" label="用户名" align="center" width="180" />
-        <el-table-column prop="role" label="权限" align="center" width="180" :formatter="formatRole" />
+        <el-table-column label="权限" prop="role" align="center" width="180">
+          <template v-slot="{ row }">
+            <el-tag v-if="row.role === 1" type="warning">管理员</el-tag>
+            <el-tag v-if="row.role === 2" type="success">普通用户</el-tag>
+          </template>
+        </el-table-column>
+
+<!--        <el-table-column prop="role" label="权限" align="center" width="180" :formatter="formatRole" />-->
         <!-- 操作列 -->
         <el-table-column label="操作" align="center">
           <template #default="scope">
@@ -300,14 +307,14 @@ const showUsers = async () => {
   }
 };
 
-// 格式化role列，如果用户role为1则显示为管理员，否则显示为普通用户
-const formatRole = (row: any) => {
-  if (row.role === 1) {
-    return '管理员';
-  } else {
-    return '普通用户';
-  }
-};
+// // 格式化role列，如果用户role为1则显示为管理员，否则显示为普通用户
+// const formatRole = (row: any) => {
+//   if (row.role === 1) {
+//     return '管理员';
+//   } else {
+//     return '普通用户';
+//   }
+// };
 // 定义一个函数，用于检测搜索框是否为空
 const inputEmpty = () => {
   if (searchData.value==""){
@@ -334,7 +341,6 @@ const editUserBtn = async (userList: UserList) => {
   editUserForm.id = userList.ID
   editUserForm.username = userList.username;
   editUserForm.role = userList.role.toString()
-  return userList.ID;
 }
 const editUser = async (userList: UserList,formEl: FormInstance | undefined) => {
   console.log(formEl)
