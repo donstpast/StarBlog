@@ -36,6 +36,12 @@ const (
 	ERROR_CATEGORY_NOT_EXIST = 3001 //分类不存在
 	ERROR_CATEGORY_USED      = 3002 //分类已存在
 	ERROR_CATEGORY_IS_EMPTY  = 3003 //分类名称不能为空
+
+	//code在(4000,5000)为标签模块错误
+
+	//code在(5000,6000)为评论模块错误
+	ERROR_COMMENT_NOT_EXIST = 5001 //评论不存在
+	ERROR_COMMENT_IS_EMPTY  = 5002
 )
 
 // 定义一个map
@@ -61,6 +67,11 @@ var codeMsg = map[int]string{
 	ERROR_CATEGORY_NOT_EXIST: "分类不存在",
 	ERROR_CATEGORY_USED:      "分类已存在",
 	ERROR_CATEGORY_IS_EMPTY:  "分类名称不能为空",
+	//标签模块错误码
+
+	//评论模块错误码
+	ERROR_COMMENT_NOT_EXIST: "评论不存在",
+	ERROR_COMMENT_IS_EMPTY:  "评论不能为空",
 }
 
 // GetErrMsg 用来输出错误信息的函数,传入一个int型，返回一个string类型

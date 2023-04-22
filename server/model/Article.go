@@ -7,8 +7,9 @@ import "gorm.io/gorm"
 // belongTo: 一个文章 属于 一个分类
 // belongTo: 一个文章 属于 一个用户
 type Article struct {
-	Category Category `gorm:"foreignKey:Cid;references:ID"`
-	User     User     `gorm:"foreignKey:Uid"`
+	Category Category  `gorm:"foreignKey:Cid;references:ID"`
+	User     User      `gorm:"foreignKey:Uid"`
+	Comments []Comment `gorm:"foreignKey:ArticleID;"`
 	gorm.Model
 	Title   string `gorm:"type:varchar(100);not null;comment:文章标题" json:"title"`
 	Cid     int    `gorm:"type:int;not null;comment:分类 ID" json:"cid"`

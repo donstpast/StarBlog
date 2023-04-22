@@ -16,17 +16,15 @@ func CreateArticle(data *model.Article) int {
 	return errmsg.SUCCESS //200
 }
 
-// todo 显示文章总数
-
 // ShowArticles 查询文章列表
 func ShowArticles(title string, pageSize int, pageNum int) ([]model.Article, int, int64) {
 	var err error
 	var arti []model.Article
 	var totalNum int64
 	if title == "" {
-		err = model.DB.Preload("Category").Preload("User").Model(&arti).Count(&totalNum).Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&arti).Error //分页通用做法
+		err = model.DB.Order("Updated_At DESC").Preload("Category").Preload("User").Model(&arti).Count(&totalNum).Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&arti).Error //分页通用做法
 	} else {
-		err = model.DB.Preload("Category").Preload("User").Model(&arti).Where("title LIKE ?", fmt.Sprintf("%%%s%%", title)).Count(&totalNum).Offset((pageNum - 1) * pageSize).Find(&arti).Error
+		err = model.DB.Order("Updated_At DESC").Preload("Category").Preload("User").Model(&arti).Where("title LIKE ?", fmt.Sprintf("%%%s%%", title)).Count(&totalNum).Offset((pageNum - 1) * pageSize).Find(&arti).Error
 	}
 	//如果err不为空，并且gorm的ErrRecordNotFound不为空，则异常，返回nil
 	if err != nil && err == gorm.ErrRecordNotFound {
@@ -39,7 +37,7 @@ func ShowArticles(title string, pageSize int, pageNum int) ([]model.Article, int
 func ShowCategoryArticles(id int, pageSize int, pageNum int) ([]model.Article, int, int64) {
 	var cateArti []model.Article
 	var totalNum int64
-	err := model.DB.Preload("Category").Limit(pageSize).Offset((pageNum-1)*pageSize).Where("cid = ?", id).Find(&cateArti).Count(&totalNum).Error
+	err := model.DB.Order("Updated_At DESC").Preload("Category").Limit(pageSize).Offset((pageNum-1)*pageSize).Where("cid = ?", id).Find(&cateArti).Count(&totalNum).Error
 	if err != nil {
 		return nil, errmsg.ERROR_CATEGORY_NOT_EXIST, 0
 	}

@@ -13,11 +13,11 @@ import './assets/css/base.css'
 //导入所有图标
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 axios.defaults.baseURL = 'http://localhost:8383/api/v1'
-//axios请求拦截器
-axios.interceptors.request.use((config) => {
-  config.headers.Authorization = `Bearer ${sessionStorage.getItem('token')}`
-  return config
-})
+// //axios请求拦截器
+// axios.interceptors.request.use((config) => {
+//   config.headers.Authorization = `Bearer ${sessionStorage.getItem('token')}`
+//   return config
+// }
 // 创建 Vue 应用实例
 const app = createApp(App)
 //进行图标全局注册

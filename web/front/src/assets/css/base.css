@@ -11,8 +11,23 @@ body {
   background-attachment: fixed;
   background-size: cover;
 }
+.el-header{
+  padding: 0;
+  height: 50px;
+}
+.el-menu--horizontal>.el-menu-item.is-active{
+  border-bottom: none;
+}
+
 .el-card {
-  margin-top: 10px;
+  border-radius: 10px;
+  background-color: rgba(250,251,254,0.9);
+  margin-top: 20px;
+  transition: box-shadow 0.3s ease-in-out;
+
+}
+.box-card:hover {
+  box-shadow: 0 20px 20px -10px rgba(0,0,0,0.25);
 }
 .el-pagination {
   margin-top: 25px;

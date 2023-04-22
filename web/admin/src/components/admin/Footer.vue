@@ -1,15 +1,15 @@
 <template>
   <div class="footer">
-    <span> ------ StarBlog Admin ------</span>
+    <el-col>
+      © 星|Donstpast  <br>------ {{new Date().getFullYear()}} StarBlog Admin ------
+    </el-col>
   </div>
 </template>
 
-<script lang="ts" setup>
-
-</script>
+<script lang="ts" setup></script>
 
 <style scoped>
-.footer{
-    text-align: center;
+.footer {
+  text-align: center;
 }
 </style>

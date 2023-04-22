@@ -24,7 +24,6 @@ func InitRouter() {
 	{
 		//文件上传
 		authV1.POST("/upload", v1.FileUploadLocal)
-
 		//User模块的路由接口
 		user := authV1.Group("/user")
 		{
@@ -59,6 +58,14 @@ func InitRouter() {
 			//删除分类
 			category.DELETE("/:id", v1.DelCategory)
 		}
+		//Comment模块的路由接口
+		comment := authV1.Group("comment")
+		{
+			//编辑评论
+			comment.PUT("/:id", v1.EditComment)
+			//删除评论
+			comment.DELETE("/:id", v1.DelComment)
+		}
 
 	}
 	//公开路由组
@@ -71,16 +78,21 @@ func InitRouter() {
 		pubilcV1.POST("/register", v1.AddUser)
 		//Article模块的路由接口
 		//查看文章列表
-		pubilcV1.GET("articles", v1.ShowArticles)
+		pubilcV1.GET("/articles", v1.ShowArticles)
 		//查看单个文章内容
-		pubilcV1.GET("article/:id", v1.ShowSingleArticle)
+		pubilcV1.GET("/article/:id", v1.ShowSingleArticle)
 		//Category模块的路由接口
 		//查看分类列表
-		pubilcV1.GET("categories", v1.ShowCategories)
+		pubilcV1.GET("/categories", v1.ShowCategories)
 		//查看单个分类信息
-		pubilcV1.GET("category/:id", v1.ShowCategoryInfo)
+		pubilcV1.GET("/category/:id", v1.ShowCategoryInfo)
 		//查看单个分类下文章
-		pubilcV1.GET("category/articles/:id", v1.ShowCategoryArticles)
+		pubilcV1.GET("/category/articles/:id", v1.ShowCategoryArticles)
+		//Comment模块的公共路由接口
+		//查看评论列表
+		pubilcV1.GET("/comments", v1.ShowComments)
+		//新增评论
+		pubilcV1.POST("/comment/add", v1.AddComment)
 
 	}
 	err := r.Run(utils.HttpPort)

@@ -51,7 +51,7 @@ func EditCategory(id int, data *model.Category) int {
 	var cate model.Category
 	var maps = make(map[string]interface{})
 	//判断分类是否存在
-	err := model.DB.Select("id").Where("id = ?", id).First(&data).Error
+	err := model.DB.Select("id").Where("id = ?", id).First(&cate).Error
 	if err != nil {
 		return errmsg.ERROR_CATEGORY_NOT_EXIST //3001 分类不存在
 	}
