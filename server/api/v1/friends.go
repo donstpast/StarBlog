@@ -9,19 +9,19 @@ import (
 	"strconv"
 )
 
-// AddComment 添加评论,引进结构体
-func AddComment(c *gin.Context) {
-	var data model.Comment
+// AddFriends 添加友链,引进结构体
+func AddFriends(c *gin.Context) {
+	var data model.Friends
 	_ = c.ShouldBindJSON(&data)
-	if data.Content != "" {
-		code := service.CreateComment(&data)
+	if data.Link != "" {
+		code := service.CreateFriends(&data)
 		c.JSON(http.StatusOK, gin.H{
 			"status":  code,
 			"data":    data,
 			"message": errmsg.GetErrMsg(code),
 		})
 	} else {
-		code := errmsg.ERROR_COMMENT_IS_EMPTY //评论不能为空
+		code := errmsg.ERROR_FRIENDS_LINKS_IS_EMPTY //友链为空
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status":  code,
 			"data":    data,
@@ -30,8 +30,8 @@ func AddComment(c *gin.Context) {
 	}
 }
 
-// ShowComments 显示评论列表
-func ShowComments(c *gin.Context) {
+// ShowFriends 显示友链列表
+func ShowFriends(c *gin.Context) {
 	pageSize, _ := strconv.Atoi(c.Query("pagesize"))
 	pageNum, _ := strconv.Atoi(c.Query("pagenum"))
 	//如果pageSize或者pageNum为0，则进行gorm中的 Cancel limit condition with -1
@@ -42,8 +42,8 @@ func ShowComments(c *gin.Context) {
 	if pageNum == 0 {
 		pageNum = 1
 	}
-	//传给model中的ShowComments函数，返回一个comment切片
-	data, totalNum := service.ShowComments(pageSize, pageNum)
+	//传给model中的ShowFriends函数，返回一个friend切片
+	data, totalNum := service.ShowFriends(pageSize, pageNum)
 	//将数据传递给前端展示
 	c.JSON(http.StatusOK, gin.H{
 		"status":   errmsg.SUCCESS,
@@ -54,12 +54,12 @@ func ShowComments(c *gin.Context) {
 
 }
 
-// EditComment 编辑评论
-func EditComment(c *gin.Context) {
-	var data model.Comment
+// EditFriends 编辑友链
+func EditFriends(c *gin.Context) {
+	var data model.Friends
 	id, _ := strconv.Atoi(c.Param("id"))
 	_ = c.ShouldBindJSON(&data)
-	code := service.EditComment(id, &data)
+	code := service.EditFriends(id, &data)
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
 		"data":    data,
@@ -68,10 +68,10 @@ func EditComment(c *gin.Context) {
 
 }
 
-// DelComment 删除评论
-func DelComment(c *gin.Context) {
+// DelFriends 删除友链
+func DelFriends(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
-	code := service.DelComment(id)
+	code := service.DelFriends(id)
 	c.JSON(http.StatusOK, gin.H{
 		"status":  code,
 		"message": errmsg.GetErrMsg(code),

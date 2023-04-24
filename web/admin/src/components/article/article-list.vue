@@ -163,10 +163,10 @@ const clickSearch = () => {
 const editArticleBtn = async (articleList: ArticleList) => {
   // // 打印出被编辑的用户的索引和信息
   const article_id = articleList.ID
-  await router.push(`/admin/write-article/${article_id}/`)
+  await router.push(`/write-article/${article_id}/`)
 }
 const addArticleBtn = async () => {
-  await router.push(`/admin/write-article`)
+  await router.push(`/write-article`)
 }
 
 // 定义一个异步函数，用于处理删除文章事件

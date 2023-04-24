@@ -66,6 +66,16 @@ func InitRouter() {
 			//删除评论
 			comment.DELETE("/:id", v1.DelComment)
 		}
+		//Friends模块的路由接口
+		friend := authV1.Group("friend")
+		{
+			//新增友链
+			friend.POST("/add", v1.AddFriends)
+			//编辑友链
+			friend.PUT("/:id", v1.EditFriends)
+			//删除友链
+			friend.DELETE("/:id", v1.DelFriends)
+		}
 
 	}
 	//公开路由组
@@ -93,6 +103,8 @@ func InitRouter() {
 		pubilcV1.GET("/comments", v1.ShowComments)
 		//新增评论
 		pubilcV1.POST("/comment/add", v1.AddComment)
+		//Friend模块的公共路由接口
+		pubilcV1.GET("/friends", v1.ShowFriends)
 
 	}
 	err := r.Run(utils.HttpPort)

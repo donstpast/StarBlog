@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"starblog/model"
 	"starblog/utils/errmsg"
 )
@@ -10,7 +9,6 @@ import (
 func CreateComment(data *model.Comment) int {
 	err := model.DB.Create(data).Error
 	if err != nil {
-		fmt.Println("3.", err)
 		return errmsg.ERROR //500
 	}
 	return errmsg.SUCCESS //200

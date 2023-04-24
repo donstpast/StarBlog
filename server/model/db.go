@@ -35,7 +35,7 @@ func InitDb() {
 	//AutoMigrate 用于自动迁移您的 schema，保持您的 schema 是最新的。
 	//用模型创建的表中缺失的列，缺失的表都会根据数据库进行更新，但是用模型建立的表会自动加复数
 
-	err = DB.AutoMigrate(&User{}, &Category{}, &Article{}, &Comment{})
+	err = DB.AutoMigrate(&User{}, &Category{}, &Article{}, &Comment{}, &Friends{}, &Tag{})
 	if err != nil {
 		fmt.Println("数据库自动迁移失败，请检查：", err)
 	}

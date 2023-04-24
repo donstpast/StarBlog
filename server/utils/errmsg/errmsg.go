@@ -41,7 +41,12 @@ const (
 
 	//code在(5000,6000)为评论模块错误
 	ERROR_COMMENT_NOT_EXIST = 5001 //评论不存在
-	ERROR_COMMENT_IS_EMPTY  = 5002
+	ERROR_COMMENT_IS_EMPTY  = 5002 //评论为空
+
+	//code在(6000，7000)为友链模块错误
+	ERROR_FRIENDS_NOT_EXIST      = 6001 //友链不存在
+	ERROR_FRIENDS_LINKS_IS_EMPTY = 6002 //友链为空
+
 )
 
 // 定义一个map
@@ -72,6 +77,10 @@ var codeMsg = map[int]string{
 	//评论模块错误码
 	ERROR_COMMENT_NOT_EXIST: "评论不存在",
 	ERROR_COMMENT_IS_EMPTY:  "评论不能为空",
+
+	//友链模块错误码
+	ERROR_FRIENDS_NOT_EXIST:      "友链不存在",
+	ERROR_FRIENDS_LINKS_IS_EMPTY: "友链为空",
 }
 
 // GetErrMsg 用来输出错误信息的函数,传入一个int型，返回一个string类型

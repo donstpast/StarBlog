@@ -7,6 +7,7 @@ import writeArticle from '@/components/article/write-article.vue'
 import ArticleList from '@/components/article/article-list.vue'
 import CategoryList from '@/components/category/category-list.vue'
 import userList from '@/components/user/user-list.vue'
+import CommentList from "@/components/comment/comment-list.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL), // 创建路由历史
@@ -21,7 +22,7 @@ const router = createRouter({
       component: Login // 组件
     },
     {
-      path: '/admin', // 后台管理页面路由
+      path: '/', // 后台管理页面路由
       name: 'admin', // 路由名称
       component: Admin, // 组件
       meta: {
@@ -46,7 +47,7 @@ const router = createRouter({
           component: ArticleList,
           name: 'Article',
           meta: {
-            title: '文章列表'
+            title: '文章列表',
           }
         },
         {
@@ -62,6 +63,13 @@ const router = createRouter({
           meta: {
             title: '用户列表'
           }
+        },
+        {
+          path: 'Comment',
+          component: CommentList,
+          meta: {
+            title: '评论列表'
+          }
         }
       ]
     }
@@ -70,6 +78,9 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   // 全局前置守卫，当每次路由切换时，都会执行该函数
+  if (to.meta.title) {
+    document.title = to.meta.title as string;
+  }
   const token = sessionStorage.getItem('token') // 从 sessionStorage 中获取 token
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     // 判断路由是否需要认证，通过判断 to.matched 数组中每个记录的 meta 对象是否包含 requiresAuth 属性来实现

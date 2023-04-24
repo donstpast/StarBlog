@@ -93,7 +93,7 @@ const login = async (formEl: FormInstance | undefined) => {
             type: 'error'
           })
         sessionStorage.setItem('token', response.data.token)
-        await router.push('/admin')
+        await router.push('/')
       } catch (error) {
         console.log(error) // 处理错误响应
       }

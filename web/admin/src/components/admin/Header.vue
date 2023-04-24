@@ -17,7 +17,7 @@ const logout = () => {
   router.push('/login')
 }
 const writeArticle = () => {
-  router.push('/admin/write-article')
+  router.push('/write-article')
 }
 </script>
 

@@ -32,3 +32,4 @@ app.use(ElementPlus)
 app.use(router)
 // 挂载应用实例到页面
 app.mount('#app')
+

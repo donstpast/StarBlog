@@ -117,7 +117,7 @@ const showArticle = async (id: any) => {
         message: err.message,
         type: 'error'
       })
-      await router.push(`/admin/write-article`)
+      await router.push(`/write-article`)
     } else {
       // 显示错误信息
       ElMessage({
@@ -158,7 +158,7 @@ const addArticle = async (formEl: FormInstance | undefined) => {
             type: 'error'
           })
         } else {
-          await router.push(`/admin/Article`)
+          await router.push(`/Article`)
           return ElMessage({
             message: '发布文章成功',
             type: 'success'
@@ -189,7 +189,7 @@ const editArticle = async (formEl: FormInstance | undefined) => {
             type: 'error'
           })
         } else {
-          await router.push(`/admin/Article`)
+          await router.push(`/Article`)
           return ElMessage({
             message: '更新文章成功',
             type: 'success'
