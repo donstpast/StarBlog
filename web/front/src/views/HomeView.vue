@@ -8,12 +8,11 @@
         <el-col :span="4">
           <el-affix :offset="71">
             <div class="navCard" >
-              <NavCard/>
+              <NavCard />
             </div>
           </el-affix>
         </el-col>
         <el-col :span="16" justify="center">
-
           <div class="articleCard">
             <router-view/>
           </div>

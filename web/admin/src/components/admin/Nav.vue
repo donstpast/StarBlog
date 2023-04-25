@@ -47,7 +47,7 @@
       <el-menu-item index="/Category">分类</el-menu-item>
       <el-menu-item index="3-5" disabled>标签(待开发)</el-menu-item>
       <el-menu-item index="/User">用户</el-menu-item>
-      <el-menu-item index="3-7" disabled>友链(待开发)</el-menu-item>
+      <el-menu-item index="/friends-links">友链</el-menu-item>
       <el-menu-item index="3-8" disabled>文件(待开发)</el-menu-item>
     </el-sub-menu>
     <el-sub-menu index="4">

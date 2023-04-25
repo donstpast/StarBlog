@@ -7,7 +7,9 @@ import writeArticle from '@/components/article/write-article.vue'
 import ArticleList from '@/components/article/article-list.vue'
 import CategoryList from '@/components/category/category-list.vue'
 import userList from '@/components/user/user-list.vue'
-import CommentList from "@/components/comment/comment-list.vue";
+import CommentList from "@/components/comment/comment-list.vue"
+import FriendsLinks from "@/components/friends/friends-links.vue";
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL), // 创建路由历史
@@ -70,7 +72,14 @@ const router = createRouter({
           meta: {
             title: '评论列表'
           }
-        }
+        },
+        {
+          path: 'friends-links',
+          component: FriendsLinks,
+          meta: {
+            title: '友链列表'
+          }
+        },
       ]
     }
   ]

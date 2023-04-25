@@ -23,10 +23,14 @@
         <el-table-column prop="ID" label="ID" align="center" width="80" />
         <el-table-column prop="articleID" label="文章ID" align="center" width="80" />
         <el-table-column prop="uid" label="用户id" align="center" width="80"/>
-        <el-table-column prop="userEmail" label="评论者邮箱" align="center" width="250"/>
+        <el-table-column prop="nickName" label="用户昵称" align="center" width="80"/>
+        <el-table-column prop="userEmail" label="评论者邮箱" align="center" width="220"/>
         <el-table-column prop="comment_content" label="评论内容" align="center" width="280"/>
+        <el-table-column prop="UpdatedAt" label="评论时间" align="center" width="200">
+          <template v-slot="scope">{{ dayjs(scope.row.UpdatedAt).format('YYYY-MM-DD HH:mm:ss') }}</template>
+        </el-table-column>
 
-        <!--        <el-table-column prop="role" label="权限" align="center" width="180" :formatter="formatRole" />-->
+
         <!-- 操作列 -->
         <el-table-column label="操作" align="center">
           <template #default="scope">
@@ -51,7 +55,7 @@
     <!-- Form -->
     <el-dialog
       v-model="editCommentFormVisible"
-      title="编辑用户"
+      title="编辑评论"
       width="30%"
       @close="clearForm(editCommentRef)"
     >
@@ -62,6 +66,9 @@
         hide-required-asterisk
         status-icon
       >
+        <el-form-item label="昵称" :label-width="formLabelWidth" prop="nickName">
+          <el-input v-model="editCommentForm.nickName" :clearable="true" autocomplete="off" />
+        </el-form-item>
         <el-form-item label="用户邮箱" :label-width="formLabelWidth" prop="userEmail">
           <el-input v-model="editCommentForm.userEmail" :clearable="true" autocomplete="off" />
         </el-form-item>
@@ -78,7 +85,7 @@
           <el-button @click="editCommentFormVisible = false">Cancel</el-button>
           <el-button
             type="primary"
-            @click="editCommentFormVisible;editComment(commentList, editCommentRef)"
+            @click="editCommentFormVisible;editComment(editCommentRef)"
           >
             Confirm
           </el-button>
@@ -94,6 +101,7 @@ import { ElMessage, ElPagination, ElMessageBox } from 'element-plus'
 import axios from 'axios'
 import { onMounted, ref, reactive } from 'vue'
 import CommentList from "@/components/comment/comment-list.vue";
+import dayjs from "dayjs";
 
 const commentList = ref([]) //列表数据
 const total = ref(0) //记录总数
@@ -109,7 +117,8 @@ const editCommentForm = reactive({
   comment_content : "",
   articleID: 0,
   uid: 0,
-  userEmail:""
+  nickName:"",
+  userEmail:"",
 })
 //编辑评论采用的规则
 const editCommentRules = reactive<FormRules>({
@@ -120,7 +129,19 @@ const editCommentRules = reactive<FormRules>({
       trigger: 'blur'
     },
   ],
+  nickName: [
+    {
+      required: true,
+      message: '昵称不能为空',
+      trigger: 'blur'
+    }
+    ],
   userEmail: [
+    {
+      required: true,
+      message: '邮箱不能为空',
+      trigger: 'blur'
+    },
     {
       //这里使用了一个正则表达式来判断邮箱的格式是否正确，
       // 正则表达式的含义是：首先匹配一个或多个字母、数字或下划线，
@@ -178,22 +199,22 @@ const editCommentBtn = async (commentList: CommentList) => {
   // // 打印出被编辑的用户的索引和信息
   editCommentForm.id = commentList.ID
   editCommentFormVisible.value = true
+  editCommentForm.nickName = commentList.nickName
   editCommentForm.comment_content = commentList.comment_content
   editCommentForm.userEmail = commentList.userEmail
 }
-const editComment = async (commentList: CommentList, formEl: FormInstance | undefined) => {
-  console.log(formEl)
+const editComment = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate(async (valid) => {
     if (valid) {
       try {
         console.log(editCommentForm)
         const comment_id = parseInt(editCommentForm.id)
-        console.log(comment_id)
         const response = await axios.put(`comment/${comment_id}`, {
           comment_content: editCommentForm.comment_content,
           userEmail: editCommentForm.userEmail,
           uid: editCommentForm.uid || 0,
+          nickName: editCommentForm.nickName
         })
         if (response.data.status != 200) {
           return ElMessage({

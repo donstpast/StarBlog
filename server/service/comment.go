@@ -18,7 +18,7 @@ func CreateComment(data *model.Comment) int {
 func ShowComments(pageSize int, pageNum int) ([]model.Comment, int64) {
 	var comment []model.Comment
 	var totalNum int64
-	err := model.DB.Model(&comment).Count(&totalNum).Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&comment).Error //分页通用做法
+	err := model.DB.Model(&comment).Order("Updated_At DESC").Count(&totalNum).Limit(pageSize).Offset((pageNum - 1) * pageSize).Find(&comment).Error //分页通用做法
 	//如果err不为空，并且gorm的ErrRecordNotFound不为空，则异常，返回nil
 	if err != nil {
 		return nil, 0
@@ -38,8 +38,14 @@ func EditComment(id int, data *model.Comment) int {
 	//判断用户是否传入空值
 	if data.Content == "" {
 		return errmsg.ERROR_COMMENT_IS_EMPTY //5002 评论不能为空
+	} else if data.UserEmail == "" {
+		return errmsg.ERROR_COMMENT_EMAIL_IS_EMPTY
+	} else if data.NickName == "" {
+		return errmsg.ERROR_COMMENT_NICKNAME_IS_EMPTY
 	} else {
-		maps["content"] = data.Content
+		maps["Content"] = data.Content
+		maps["NickName"] = data.NickName
+		maps["UserEmail"] = data.UserEmail
 		err = model.DB.Model(&comment).Where("id = ?", id).Updates(maps).Error
 		if err != nil {
 			return errmsg.ERROR

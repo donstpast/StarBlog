@@ -18,6 +18,10 @@
   </div>
 </template>
 <div class="text item">{{ article.desc }}</div>
+  <el-divider />
+  <div class="card-footer">
+    {{ dayjs(article.UpdatedAt).format('YYYY-MM-DD HH:mm:ss') }}
+  </div>
 </el-card>
   <!-- 分页栏 -->
   <el-pagination
@@ -32,10 +36,11 @@
 </template>
 
 <script setup lang="ts">
-import { ElMessage, ElPagination, ElMessageBox } from 'element-plus'
+import { ElMessage, ElPagination } from 'element-plus'
 import axios from 'axios'
 import { onMounted, provide, ref } from "vue";
 import router from "@/router";
+import dayjs from "dayjs";
 const articleList = ref([]) //列表数据
 const total = ref(0) //记录总数
 const pageSize = ref(5) //分页大小
@@ -98,7 +103,15 @@ onMounted(() => {
 
 .text {
     font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
+
+
 
 .item {
     margin-bottom: 18px;
