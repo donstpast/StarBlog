@@ -45,7 +45,7 @@
       <el-menu-item index="3-2" disabled>独立页面(待开发)</el-menu-item>
       <el-menu-item index="/Comment">评论</el-menu-item>
       <el-menu-item index="/Category">分类</el-menu-item>
-      <el-menu-item index="3-5" disabled>标签(待开发)</el-menu-item>
+      <el-menu-item index="/Tag">标签</el-menu-item>
       <el-menu-item index="/User">用户</el-menu-item>
       <el-menu-item index="/friends-links">友链</el-menu-item>
       <el-menu-item index="3-8" disabled>文件(待开发)</el-menu-item>
@@ -77,7 +77,7 @@ const handleClose = (key: string, keyPath: string[]) => {
 }
 
 onMounted(() => {
-  const defaultPath = router.currentRoute.value.path.slice(7)
+  const defaultPath = router.currentRoute.value.path.slice(1)
   const targetPath = router.currentRoute.value.path
   if (defaultPath.length === 0) {
     activeIndex.value = '1-1'

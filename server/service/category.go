@@ -59,7 +59,7 @@ func EditCategory(id int, data *model.Category) int {
 	if data.Name == "" {
 		return errmsg.ERROR_CATEGORY_IS_EMPTY //3003 分类名不能为空
 	} else {
-		maps["name"] = data.Name
+		maps["Name"] = data.Name
 		err = model.DB.Model(&cate).Where("id = ?", id).Updates(maps).Error
 		if err != nil {
 			return errmsg.ERROR

@@ -58,6 +58,16 @@ func InitRouter() {
 			//删除分类
 			category.DELETE("/:id", v1.DelCategory)
 		}
+		//Tag模块的路由接口
+		tag := authV1.Group("/tag")
+		{
+			//添加标签
+			tag.POST("/add", v1.AddTag)
+			//编辑标签
+			tag.PUT("/:id", v1.EditTag)
+			//删除标签
+			tag.DELETE("/:id", v1.DelTag)
+		}
 		//Comment模块的路由接口
 		comment := authV1.Group("comment")
 		{
@@ -83,14 +93,17 @@ func InitRouter() {
 	{
 		//管理员登录接口
 		pubilcV1.POST("/login", v1.AdminLogin)
+
 		//User模块的路由接口
 		//添加用户
 		pubilcV1.POST("/register", v1.AddUser)
+
 		//Article模块的路由接口
 		//查看文章列表
 		pubilcV1.GET("/articles", v1.ShowArticles)
 		//查看单个文章内容
 		pubilcV1.GET("/article/:id", v1.ShowSingleArticle)
+
 		//Category模块的路由接口
 		//查看分类列表
 		pubilcV1.GET("/categories", v1.ShowCategories)
@@ -98,11 +111,19 @@ func InitRouter() {
 		pubilcV1.GET("/category/:id", v1.ShowCategoryInfo)
 		//查看单个分类下文章
 		pubilcV1.GET("/category/articles/:id", v1.ShowCategoryArticles)
+
+		//Tag模块的路由接口
+		//查看标签列表
+		pubilcV1.GET("/tags", v1.ShowTag)
+		//查看单个标签信息
+		pubilcV1.GET("/tag/:id", v1.ShowTagInfo)
+
 		//Comment模块的公共路由接口
 		//查看评论列表
 		pubilcV1.GET("/comments", v1.ShowComments)
 		//新增评论
 		pubilcV1.POST("/comment/add", v1.AddComment)
+
 		//Friend模块的公共路由接口
 		pubilcV1.GET("/friends", v1.ShowFriends)
 

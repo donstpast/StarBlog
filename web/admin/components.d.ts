@@ -56,6 +56,7 @@ declare module '@vue/runtime-core' {
     Nav: typeof import('./src/components/admin/Nav.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    TagList: typeof import('./src/components/tag/tag-list.vue')['default']
     User: typeof import('./src/components/user/User.vue')['default']
     UserList: typeof import('./src/components/user/user-list.vue')['default']
     WriteArticle: typeof import('./src/components/article/write-article.vue')['default']

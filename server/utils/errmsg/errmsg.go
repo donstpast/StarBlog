@@ -38,7 +38,9 @@ const (
 	ERROR_CATEGORY_IS_EMPTY  = 3003 //分类名称不能为空
 
 	//code在(4000,5000)为标签模块错误
-
+	ERROR_TAG_NOT_EXIST = 4001 //标签不存在
+	ERROR_TAG_USED      = 4002 //标签已存在
+	ERROR_TAG_IS_EMPTY  = 4003 //标签名称不能为空
 	//code在(5000,6000)为评论模块错误
 	ERROR_COMMENT_NOT_EXIST         = 5001 //评论不存在
 	ERROR_COMMENT_IS_EMPTY          = 5002 //评论为空
@@ -75,7 +77,9 @@ var codeMsg = map[int]string{
 	ERROR_CATEGORY_USED:      "分类已存在",
 	ERROR_CATEGORY_IS_EMPTY:  "分类名称不能为空",
 	//标签模块错误码
-
+	ERROR_TAG_NOT_EXIST: "标签不存在",
+	ERROR_TAG_USED:      "标签已存在",
+	ERROR_TAG_IS_EMPTY:  "标签名称不能为空",
 	//评论模块错误码
 	ERROR_COMMENT_NOT_EXIST:         "评论不存在",
 	ERROR_COMMENT_IS_EMPTY:          "评论不能为空",

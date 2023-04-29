@@ -10,7 +10,7 @@ type Article struct {
 	Category Category  `gorm:"foreignKey:Cid;references:ID"`
 	User     User      `gorm:"foreignKey:Uid"`
 	Comments []Comment `gorm:"foreignKey:ArticleID;"`
-	Tags     []*Tag    `gorm:"many2many:article_tags"`
+	Tags     []*Tag    `gorm:"many2many:article_tags;"`
 	gorm.Model
 	Title   string `gorm:"type:varchar(100);not null;comment:文章标题" json:"title"`
 	Cid     int    `gorm:"type:int;not null;comment:分类 ID" json:"cid"`

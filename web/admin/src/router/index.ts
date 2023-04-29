@@ -6,6 +6,7 @@ import Admin from '@/views/Admin.vue' // 导入后台管理页面组件
 import writeArticle from '@/components/article/write-article.vue'
 import ArticleList from '@/components/article/article-list.vue'
 import CategoryList from '@/components/category/category-list.vue'
+import TagList from "@/components/tag/tag-list.vue";
 import userList from '@/components/user/user-list.vue'
 import CommentList from "@/components/comment/comment-list.vue"
 import FriendsLinks from "@/components/friends/friends-links.vue";
@@ -36,13 +37,18 @@ const router = createRouter({
           path: 'write-article',
           component: writeArticle,
           meta: {
-            title: '添加文章'
+            title: '添加文章',
+
           }
         },
         {
           path: 'write-article/:id',
           component: writeArticle,
-          props: true
+          props: true,
+          meta:{
+            title:'编辑文章',
+
+          }
         },
         {
           path: 'Article',
@@ -50,34 +56,47 @@ const router = createRouter({
           name: 'Article',
           meta: {
             title: '文章列表',
+
           }
         },
         {
           path: 'Category',
           component: CategoryList,
           meta: {
-            title: '分类列表'
+            title: '分类列表',
+
           }
         },
         {
           path: 'User',
           component: userList,
           meta: {
-            title: '用户列表'
+            title: '用户列表',
+
           }
         },
         {
           path: 'Comment',
           component: CommentList,
           meta: {
-            title: '评论列表'
+            title: '评论列表',
+
           }
         },
         {
           path: 'friends-links',
           component: FriendsLinks,
           meta: {
-            title: '友链列表'
+            title: '友链列表',
+
+          }
+        },
+        {
+          path: 'Tag',
+          component: TagList,
+          meta: {
+            title: '标签列表',
+
           }
         },
       ]
