@@ -18,7 +18,7 @@ func AddArticle(c *gin.Context) {
 	if !exists {
 		c.JSON(http.StatusOK, gin.H{
 			"status":  errmsg.ERROR_TOKEN_NOT_EXIST,
-			"massage": errmsg.GetErrMsg(errmsg.ERROR_TOKEN_NOT_EXIST),
+			"message": errmsg.GetErrMsg(errmsg.ERROR_TOKEN_NOT_EXIST),
 		})
 		c.Abort()
 		return

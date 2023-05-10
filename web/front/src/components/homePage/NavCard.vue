@@ -24,7 +24,6 @@
     <template #header>
       <div class="card-header">
         <span>页面导航</span>
-
       </div>
     </template>
     <div
@@ -188,7 +187,6 @@ onMounted(() => {
 .category-list a {
     text-decoration: none;
     color: black;
-
 }
 .category-list a:hover{
     color: rgb(238,121,124);

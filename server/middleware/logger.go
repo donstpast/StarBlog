@@ -51,17 +51,16 @@ func Logger() gin.HandlerFunc {
 
 	return func(c *gin.Context) { // 返回一个gin的处理函数
 		startTime := time.Now() // 记录处理开始的时间
-
-		c.Next() // 调用gin.Context的Next方法，处理后续的中间件和请求处理函数
+		c.Next()                // 调用gin.Context的Next方法，处理后续的中间件和请求处理函数
 
 		stopTime := time.Since(startTime)                          // 计算处理耗时
 		spendTime := fmt.Sprintf("%d ms", stopTime.Milliseconds()) // 耗时转换成字符串格式，单位为毫秒
 
-		hostName, err := os.Hostname() // 获取本机hostname
+		hostName, err := os.Hostname() // 获取客户机器hostname
 		if err != nil {                // 如果获取hostname出错，将其设置为unknown
 			hostName = "unknown"
 		}
-
+		referer := c.Request.Referer()
 		statusCode := c.Writer.Status()    // 获取HTTP响应状态码
 		clientIp := c.ClientIP()           // 获取客户端IP地址
 		userAgent := c.Request.UserAgent() // 获取客户端User-Agent头信息
@@ -72,9 +71,11 @@ func Logger() gin.HandlerFunc {
 
 		reqMethod := c.Request.Method   // 获取HTTP请求方法
 		reqPath := c.Request.RequestURI // 获取HTTP请求URI
+
 		// 构建log.Entry对象，包含HTTP请求的各种信息
 		entry := logger.WithFields(log.Fields{
 			"RequestPath":   reqPath,
+			"Referer":       referer,
 			"RequestMethod": reqMethod,
 			"ClientIP":      clientIp,
 			"HostName":      hostName,

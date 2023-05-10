@@ -3,6 +3,8 @@ import Login from '@/views/Login.vue' // 导入登录页面组件
 import Admin from '@/views/Admin.vue' // 导入后台管理页面组件
 
 // 导入页面路由组件
+import blogData from '@/components/console/blog-data.vue'
+import userProfile from '@/components/console/user-profile.vue'
 import writeArticle from '@/components/article/write-article.vue'
 import ArticleList from '@/components/article/article-list.vue'
 import CategoryList from '@/components/category/category-list.vue'
@@ -33,6 +35,20 @@ const router = createRouter({
         requiresAuth: true
       }, // 添加需要认证的标识
       children: [
+        {
+          path: '/',
+          component:blogData,
+          meta: {
+            title: '博客数据',
+          }
+        },
+        {
+          path:'user-profile',
+          component:userProfile,
+          meta:{
+            title: '个人资料'
+          }
+        },
         {
           path: 'write-article',
           component: writeArticle,

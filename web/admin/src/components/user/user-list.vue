@@ -38,9 +38,9 @@
         <el-table-column label="操作" align="center">
           <template #default="scope">
             <!-- 编辑按钮 -->
-            <el-button size="small" @click="editUserBtn(scope.row)">Edit </el-button>
+            <el-button size="small" @click="editUserBtn(scope.row)">编辑 </el-button>
             <!-- 删除按钮 -->
-            <el-button size="small" type="danger" @click="deleteUser(scope.row)">Delete </el-button>
+            <el-button size="small" type="danger" @click="deleteUser(scope.row)">删除 </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -97,12 +97,12 @@
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="addUserFormVisible = false">Cancel</el-button>
+          <el-button @click="addUserFormVisible = false">取消</el-button>
           <el-button
             type="primary"
             @click="addUserFormVisible;addUser(addUserRef)"
           >
-            Confirm
+            确认
           </el-button>
         </span>
       </template>
@@ -143,12 +143,12 @@
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="editUserFormVisible = false">Cancel</el-button>
+          <el-button @click="editUserFormVisible = false">取消</el-button>
           <el-button
             type="primary"
             @click="editUserFormVisible;editUser(userList, editUserRef)"
           >
-            Confirm
+            确认
           </el-button>
         </span>
       </template>
@@ -329,7 +329,6 @@ const editUserBtn = async (userList: UserList) => {
   editUserForm.role = userList.role.toString()
 }
 const editUser = async (userList: UserList, formEl: FormInstance | undefined) => {
-  console.log(formEl)
   if (!formEl) return
   await formEl.validate(async (valid) => {
     if (valid) {

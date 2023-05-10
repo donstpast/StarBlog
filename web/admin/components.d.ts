@@ -12,6 +12,7 @@ declare module '@vue/runtime-core' {
     AddArticle: typeof import('./src/components/article/addArticle.vue')['default']
     Article: typeof import('./src/components/article/Article.vue')['default']
     ArticleList: typeof import('./src/components/article/article-list.vue')['default']
+    BlogData: typeof import('./src/components/console/blog-data.vue')['default']
     Category: typeof import('./src/components/category/Category.vue')['default']
     CategoryList: typeof import('./src/components/category/category-list.vue')['default']
     CommentList: typeof import('./src/components/comment/comment-list.vue')['default']
@@ -22,6 +23,7 @@ declare module '@vue/runtime-core' {
     ElConfigProvider: typeof import('element-plus/es')['ElConfigProvider']
     ElContainer: typeof import('element-plus/es')['ElContainer']
     ElDialog: typeof import('element-plus/es')['ElDialog']
+    ElDivider: typeof import('element-plus/es')['ElDivider']
     ElFooter: typeof import('element-plus/es')['ElFooter']
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
@@ -59,6 +61,7 @@ declare module '@vue/runtime-core' {
     TagList: typeof import('./src/components/tag/tag-list.vue')['default']
     User: typeof import('./src/components/user/User.vue')['default']
     UserList: typeof import('./src/components/user/user-list.vue')['default']
+    UserProfile: typeof import('./src/components/console/user-profile.vue')['default']
     WriteArticle: typeof import('./src/components/article/write-article.vue')['default']
   }
 }

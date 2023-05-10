@@ -38,5 +38,7 @@ import Nav from '@/components/admin/Nav.vue'
 }
 .containFooter {
   align-items: center;
+  flex-shrink: 0;
+
 }
 </style>

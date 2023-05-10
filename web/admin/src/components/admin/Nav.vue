@@ -1,6 +1,6 @@
 <template>
   <div class="logo">
-    <span>{{ 'StarBolg Admin' }}</span>
+    <span>{{ 'StarBlog Admin' }}</span>
   </div>
 
   <el-menu
@@ -20,12 +20,12 @@
         <span>控制台</span>
       </template>
       <el-menu-item-group title="概要">
-        <el-menu-item index="1-1" disabled>博客数据(待开发)</el-menu-item>
+        <el-menu-item index="/" >博客数据</el-menu-item>
         <el-menu-item index="1-2" disabled>评论数据(待开发)</el-menu-item>
         <el-menu-item index="1-3" disabled>访客信息(待开发)</el-menu-item>
       </el-menu-item-group>
       <el-menu-item-group title="个人设置">
-        <el-menu-item index="1-4" disabled>个人资料(待开发)</el-menu-item>
+        <el-menu-item index="/user-profile">个人资料(开发ing)</el-menu-item>
       </el-menu-item-group>
     </el-sub-menu>
     <el-sub-menu index="2">
@@ -66,7 +66,7 @@
 import { onMounted, ref } from 'vue'
 import router from '@/router'
 
-const activeIndex = ref('1-1')
+const activeIndex = ref('/')
 
 const handleOpen = (key: string, keyPath: string[]) => {
   console.log('当前展开的菜单项：', keyPath[0])
@@ -80,7 +80,7 @@ onMounted(() => {
   const defaultPath = router.currentRoute.value.path.slice(1)
   const targetPath = router.currentRoute.value.path
   if (defaultPath.length === 0) {
-    activeIndex.value = '1-1'
+    activeIndex.value = '/'
   } else {
     activeIndex.value = String(targetPath)
   }

@@ -152,3 +152,27 @@ func DelUser(c *gin.Context) {
 		"message": errmsg.GetErrMsg(code),
 	})
 }
+
+// ShowUserProfile 显示个人资料
+
+func ShowUserProfile(c *gin.Context) {
+	username, exists := c.Get("username")
+	if !exists {
+		c.JSON(http.StatusOK, gin.H{
+			"status":  errmsg.ERROR_TOKEN_NOT_EXIST,
+			"message": errmsg.GetErrMsg(errmsg.ERROR_TOKEN_NOT_EXIST),
+		})
+		c.Abort()
+		return
+	}
+	name := username.(*middleware.MyClaims).Username
+	id, _ := service.ShowUserID(name)
+	data, code := service.ShowUserInfo(int(id))
+	data.Salt = ""
+	data.Password = ""
+	c.JSON(http.StatusOK, gin.H{
+		"status":  code,
+		"data":    data,
+		"message": errmsg.GetErrMsg(code),
+	})
+}

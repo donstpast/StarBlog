@@ -39,7 +39,6 @@ const showComment = async () => {
       throw new Error(response.data.message)
     }
     commentList.value = response.data.data
-    console.log(commentList)
   } catch (error: unknown) {
     const err = error as Error
     // 显示错误信息

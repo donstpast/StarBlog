@@ -1,7 +1,6 @@
 <template>
   <div>
     <el-card class="cardBox">
-      <!-- 搜索栏 -->
       <el-row :gutter="20">
         <el-col :span="4">
           <!-- 新增按钮 -->
@@ -11,7 +10,12 @@
       <!-- 标签列表 -->
       <el-table stripe style="width: 100%" class="tagTable" :data="tagList">
         <el-table-column prop="id" label="ID" align="center" width="180" />
-        <el-table-column prop="name" label="分类名" align="center" width="180" />
+        <el-table-column prop="name" label="标签名" align="center" width="180">
+          <template #default="scope">
+            <el-tag type="success">{{ scope.row.name }}</el-tag>
+          </template>
+        </el-table-column>
+
         <!-- 操作列 -->
         <el-table-column label="操作" align="center">
           <template #default="scope">
@@ -174,7 +178,7 @@ const showTags = async () => {
 
 // 定义一个函数，用于处理用户编辑事件
 const editTagBtn = async (tagList: TagList) => {
-  // // 打印出被编辑的用户的索引和信息
+  // // 打印出被编辑的标签的索引和信息
   editTagFormVisible.value = true
   editTagForm.id = tagList.id
   editTagForm.name = tagList.name
@@ -185,7 +189,7 @@ const editTag = async (tagList: TagList, formEl: FormInstance | undefined) => {
     if (valid) {
       try {
         const tag_id = editTagForm.id
-        const response = await axios.put(`category/${tag_id}`, {
+        const response = await axios.put(`tag/${tag_id}`, {
           name: editTagForm.name
         })
         if (response.data.status != 200) {
@@ -232,7 +236,7 @@ const deleteTag = async (tagList: TagList) => {
       return
     }
     // 发送删除该标签信息的请求
-    const response = await axios.delete(`category/${tagList.id}`, {})
+    const response = await axios.delete(`tag/${tagList.id}`, {})
     // 调用 showTags() 函数展示剩余标签信息
     await showTags()
     // 若删除操作未成功，则抛出错误
@@ -301,7 +305,7 @@ const addTag = async (formEl: FormInstance | undefined) => {
 const handleSizeChange = (val: number) => {
   // 将当前页显示的条数设置为用户选择的条数
   pageSize.value = val
-  // 调用 showUsers() 函数展示符合当前搜索条件的用户信息
+  // 调用 showTags() 函数展示符合当前搜索条件的用户信息
   showTags()
 }
 
@@ -309,11 +313,11 @@ const handleSizeChange = (val: number) => {
 const handleCurrentChange = (val: number) => {
   // 将当前页码设置为用户选择的页码
   currentPage.value = val
-  // 调用 showTags() 函数展示符合当前搜索条件的用户信息
+  // 调用 showTags() 函数展示符合当前搜索条件的标签信息
   showTags()
 }
 
-// 在组件挂载完成后，调用 showTags() 函数展示所有用户信息
+// 在组件挂载完成后，调用 showTags() 函数展示所有标签信息
 onMounted(() => {
   showTags()
 })
