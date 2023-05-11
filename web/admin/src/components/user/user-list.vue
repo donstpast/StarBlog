@@ -334,7 +334,6 @@ const editUser = async (userList: UserList, formEl: FormInstance | undefined) =>
     if (valid) {
       try {
         const user_id = parseInt(editUserForm.id)
-        console.log(user_id)
         const response = await axios.put(`user/${user_id}`, {
           username: editUserForm.username,
           password: editUserForm.password || '',

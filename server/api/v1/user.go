@@ -140,7 +140,6 @@ func EditUser(c *gin.Context) {
 		"data":    data,
 		"message": errmsg.GetErrMsg(code),
 	})
-
 }
 
 // DelUser 删除用户
@@ -154,7 +153,6 @@ func DelUser(c *gin.Context) {
 }
 
 // ShowUserProfile 显示个人资料
-
 func ShowUserProfile(c *gin.Context) {
 	username, exists := c.Get("username")
 	if !exists {

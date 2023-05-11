@@ -17,6 +17,7 @@ declare module '@vue/runtime-core' {
     CategoryList: typeof import('./src/components/category/category-list.vue')['default']
     CommentList: typeof import('./src/components/comment/comment-list.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
+    ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCard: typeof import('element-plus/es')['ElCard']
     ElCol: typeof import('element-plus/es')['ElCol']
@@ -63,5 +64,6 @@ declare module '@vue/runtime-core' {
     UserList: typeof import('./src/components/user/user-list.vue')['default']
     UserProfile: typeof import('./src/components/console/user-profile.vue')['default']
     WriteArticle: typeof import('./src/components/article/write-article.vue')['default']
+    WritePage: typeof import('./src/components/page/write-page.vue')['default']
   }
 }

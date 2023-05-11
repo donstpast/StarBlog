@@ -34,7 +34,7 @@
         <span>撰写</span>
       </template>
       <el-menu-item index="/write-article">编写文章</el-menu-item>
-      <el-menu-item index="/create-page" disabled>创建页面(待开发)</el-menu-item>
+      <el-menu-item index="/write-page">创建页面(开发ing)</el-menu-item>
     </el-sub-menu>
     <el-sub-menu index="3">
       <template #title>

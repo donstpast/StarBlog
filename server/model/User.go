@@ -15,7 +15,7 @@ type User struct {
 	Desc     string `gorm:"type:varchar(40);"  label:"描述" json:"desc"`
 	Website  string `gorm:"type:varchar(40);"  label:"个人主页" json:"site"`
 	Email    string `gorm:"type:varchar(40);"  label:"邮箱" json:"email"`
-	Avatar   string `gorm:"type:varchar(40);"  label:"头像" json:"avatar"`
+	Avatar   string `gorm:"type:varchar(250);"  label:"头像" json:"avatar"`
 	Role     int    `gorm:"type:int" json:"role" validate:"" label:"身份码"`
 	Salt     string `gorm:"type:varchar(20);not null" json:"salt"`
 }

@@ -3,15 +3,16 @@ import Login from '@/views/Login.vue' // 导入登录页面组件
 import Admin from '@/views/Admin.vue' // 导入后台管理页面组件
 
 // 导入页面路由组件
-import blogData from '@/components/console/blog-data.vue'
-import userProfile from '@/components/console/user-profile.vue'
-import writeArticle from '@/components/article/write-article.vue'
+import BlogData from '@/components/console/blog-data.vue'
+import UserProfile from '@/components/console/user-profile.vue'
+import WriteArticle from '@/components/article/write-article.vue'
 import ArticleList from '@/components/article/article-list.vue'
 import CategoryList from '@/components/category/category-list.vue'
 import TagList from "@/components/tag/tag-list.vue";
-import userList from '@/components/user/user-list.vue'
+import UserList from '@/components/user/user-list.vue'
 import CommentList from "@/components/comment/comment-list.vue"
 import FriendsLinks from "@/components/friends/friends-links.vue";
+import WritePage from "@/components/page/write-page.vue";
 
 
 const router = createRouter({
@@ -37,21 +38,21 @@ const router = createRouter({
       children: [
         {
           path: '/',
-          component:blogData,
+          component:BlogData,
           meta: {
             title: '博客数据',
           }
         },
         {
           path:'user-profile',
-          component:userProfile,
+          component:UserProfile,
           meta:{
             title: '个人资料'
           }
         },
         {
           path: 'write-article',
-          component: writeArticle,
+          component: WriteArticle,
           meta: {
             title: '添加文章',
 
@@ -59,7 +60,7 @@ const router = createRouter({
         },
         {
           path: 'write-article/:id',
-          component: writeArticle,
+          component: WriteArticle,
           props: true,
           meta:{
             title:'编辑文章',
@@ -85,7 +86,7 @@ const router = createRouter({
         },
         {
           path: 'User',
-          component: userList,
+          component: UserList,
           meta: {
             title: '用户列表',
 
@@ -112,6 +113,14 @@ const router = createRouter({
           component: TagList,
           meta: {
             title: '标签列表',
+
+          }
+        },
+        {
+          path: 'write-page',
+          component: WritePage,
+          meta: {
+            title: '添加页面',
 
           }
         },
